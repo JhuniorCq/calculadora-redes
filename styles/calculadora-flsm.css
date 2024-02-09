@@ -1,0 +1,62 @@
+* {
+    color: white;
+}
+
+.contenedor {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formulario {
+    border: 1px solid red;
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.parrafo {
+    display: block;
+}
+
+.fila {
+    border: 1px solid blue;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.fila div {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.resultado {
+    border-bottom: 1px solid black;
+    border-bottom-color: white;
+}
+
+.contenedor-boton {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.boton-calcular {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: brown;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.boton-calcular:hover {
+    scale: 1.1;
+}

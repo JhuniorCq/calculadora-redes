@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculadora de Subredes</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="styles/calculadora-flsm.css">
+    </head>
+    <body>
+        <main>
+            <div class="contenedor">
+                <form class="formulario">
+                    <div class="fila">
+                        <div>
+                            <label for="direccion-ip">Dirección IP: </label>
+                            <input type="text" id="direccion-ip" name="direccion-ip" required>
+                        </div>
+                        <div>
+                            <p class="parrafo">Prefijo de Red:</p>
+                            <p id="prefijo-red" class="resultado"></p>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div>
+                            <label for="numero-subredes">Número de Subredes: </label>
+                            <input type="text" id="numero-subredes" name="numero-subredes" required>
+                        </div>
+                        <div>
+                            <p class="parrafo">Hosts por Subred: </p>
+                            <p id="hosts-subred" class="resultado"></p>
+                        </div>
+                    </div>
+                    <div class="contenedor-boton">
+                        <button class="boton-calcular">PRESIONAME</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <script src="js/calculadora-flsm.js"></script>
+    </body>
+</html>
