@@ -2,9 +2,9 @@ import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js'
 
 const formulario = document.querySelector('.formulario');
 const direccionIpInput = document.getElementById('direccion-ip');
-const prefijoRedInput= document.getElementById('prefijo-red')
+const prefijoRedInput= document.getElementById('prefijo-red'); // Acá mostraré un dato
 const numeroSubRedesInput = document.getElementById('numero-subredes');
-const hostsSubRedInput = document.getElementById('hosts-subred');
+const hostsSubRedInput = document.getElementById('hosts-subred'); // Acá mostraré un dato
 const datosRed = {};
 // let cantidadBitsSubred, cantidadBitsHostSubred, cantidadSubredesCreadas;
 
@@ -23,7 +23,6 @@ const calcularDatos = (evento) => {
     
     //Acá asignamos la Clase, el Prefijo de Red y la Máscara de Red al Objeto "datosRed"
     hallarPrefijoRed(direccionIPValor);
-
     prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
 
     // return;
@@ -187,4 +186,15 @@ const convertirDecimalNuevaMascara = (nuevaMascaraSubredBinario) => {
     return nuevaMascaraSubredBinario;
 }
 
+//Con esto mostraremos el Prefijo de Red, pero de manera dinámica
+const mostrarPrefijoRed = () => {
+    //PROCESO PARA HALLAR EL PREFIJO DE RED
+    const direccionIPValor = direccionIpInput.value;    // '192.168.200.139'
+
+    hallarPrefijoRed(direccionIPValor);
+
+    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
+}
+
 formulario.addEventListener('submit', calcularDatos);
+direccionIpInput.addEventListener('input', mostrarPrefijoRed);
