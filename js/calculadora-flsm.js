@@ -1,57 +1,69 @@
+import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js';
+
 const formulario = document.querySelector('.formulario');
 const direccionIpInput = document.getElementById('direccion-ip');
-const prefijoRedCampo= document.getElementById('prefijo-red')
+const prefijoRedInput= document.getElementById('prefijo-red')
 const numeroSubRedesInput = document.getElementById('numero-subredes');
-const hostsSubRedCampo = document.getElementById('hosts-subred');
+const hostsSubRedInput = document.getElementById('hosts-subred');
 const datosRed = {};
+// let cantidadBitsSubred, cantidadBitsHostSubred, cantidadSubredesCreadas;
 
 //IP DE EJEMPLO: 192.168.200.139
-const hallar = (evento) => {
+const calcularDatos = (evento) => {
     evento.preventDefault();
 
     //PROCESO PARA HALLAR EL PREFIJO DE RED
-    const direccionIPValor = direccionIpInput.value;
-    
-    const arrayNumerosIP = direccionIPValor.split('.');
-    const primerNumero = arrayNumerosIP[0];
+    const direccionIPValor = direccionIpInput.value;    // '192.168.200.139'
+    const numeroSubRedesValor = numeroSubRedesInput.value;  // 8
+
+    //VALIDAR DATOS
+    if(!validarDireccionIP(direccionIPValor)/* || !validarNumeroSubRedes(numeroSubRedesValor)*/) {
+        return;
+    }
     
     //Acá asignamos la Clase, el Prefijo de Red y la Máscara de Red al Objeto "datosRed"
-    hallarPrefijoRed(primerNumero);                 //VALIDAR QUE LOS CAMPOS SEAN OBLIGATORIOS
+    hallarPrefijoRed(direccionIPValor);
 
-    prefijoRedCampo.innerText = datosRed.prefijoRed; //Mostramos Prefijo de Red
+    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
 
+    // return;
+    //LO PUEDO HACER EN OTRA FUNCIÓN CREO
     //PROCESO PARA HALLAR LOS HOSTS POR SUBRED
-    const numeroSubRedesValor = numeroSubRedesInput.value;
-    console.log(numeroSubRedesValor);
+    console.log('Número de Subredes ingresado: ', numeroSubRedesValor);
 
-    const mascaraRed = datosRed.mascaraRed;
-    const arrayNumerosMascara = mascaraRed.split('.');
-    const mascaraRedBinario = convertirBinario(mascaraRed);
+    const mascaraSubred = datosRed.mascaraSubred;
+    const arrayNumerosMascara = mascaraSubred.split('.');
+    const mascaraSubredBinario = convertirBinario(mascaraSubred);
     
-    console.log(arrayNumerosMascara)
-    console.log('Máscara red binario: ', mascaraRedBinario)
+    console.log('Máscara red original decimal: ', arrayNumerosMascara)
+    console.log('Máscara red original binario: ', mascaraSubredBinario)
 
-    const valorN = hallarCantidadBits(numeroSubRedesValor);
+    const valorN = hallarCantidadBits(numeroSubRedesValor); // FALTA VER SI EL NOMBRE DE VARIABLE TA BIEN
     console.log('Valor de N: ', valorN)
 
-    // const claseRed = datosRed.claseRed;
-    const x = agregarUnosCeros(valorN, mascaraRedBinario);
-    console.log(x);
+    // Esta función me devuelve la NUEVA MÁSCADA DE SUBRED (EN DECIMAL)
+    const nuevaMascaraSubredDecimal = obtenerNuevaMascaraSubred(valorN, mascaraSubredBinario);
+    console.log(nuevaMascaraSubredDecimal);
+
+    
 }
 
-const hallarPrefijoRed = (primerNumero) => {
+const hallarPrefijoRed = (direccionIPValor) => {
+    const arrayNumerosIP = direccionIPValor.split('.');     // ['192', '168', '200', '139']
+    const primerNumero = arrayNumerosIP[0];     // '192'
+
     if(primerNumero >= 0 && primerNumero <= 127) {
         datosRed.claseRed = 'A';
         datosRed.prefijoRed = 8;
-        datosRed.mascaraRed = '255.0.0.0';
+        datosRed.mascaraSubred = '255.0.0.0'; //Se asigna la Máscara de Subred Original
     } else if(primerNumero >= 128 && primerNumero <= 191) {
         datosRed.claseRed = 'B';
         datosRed.prefijoRed = 16;
-        datosRed.mascaraRed = '255.255.0.0';
+        datosRed.mascaraSubred = '255.255.0.0'; //Se asigna la Máscara de Subred Original
     } else if(primerNumero >= 192 && primerNumero <= 223){
         datosRed.claseRed = 'C';
         datosRed.prefijoRed = 24;
-        datosRed.mascaraRed = '255.255.255.0';
+        datosRed.mascaraSubred = '255.255.255.0'; //Se asigna la Máscara de Subred Original
     }
 }
 
@@ -77,85 +89,21 @@ const hallarCantidadBits = (numeroSubRedesValor) => {
     return i;
 }
 
-const agregarUnosCeros = (valorN, mascaraRedBinario) => {
-    // const cantidadUnos = valorN;
-    //Si la resta sale negativo hago un IF -> y me paso al siguiente 0 y ahi completo con UNOS
-    let cantidadCeros = 0; 
-    
-    mascaraRedBinario.forEach(valor => {
-        if(valor === '0') {
-            cantidadCeros++;
-        }
-    });
-
-    console.log('jwd: ', cantidadCeros);
-
+const obtenerNuevaMascaraSubred = (valorN, mascaraSubredBinario) => {
+    const cantidadCeros = hallarCantidadCeros(mascaraSubredBinario);
     const cadenaCeros = formarCadena(cantidadCeros*8, '0'); //Formamos una cadena con una cantidad de CEROS múltiplo de 8
-    console.log(cadenaCeros);
+    const nuevoValor = agregarUnosCadenaCeros(cadenaCeros, valorN);
 
-    let nuevoValor = '';
-    for(let i=0; i<cadenaCeros.length; i++) {
-        if(i <= valorN - 1) {
-            nuevoValor = nuevoValor + '1';
-        } else {
-            nuevoValor = nuevoValor + '0';
-        }
+    console.log(`Se eliminará los ${cantidadCeros} últimos ceros y se agregará esto: ${nuevoValor}`);
 
-        // cadenaCeros[i] = '1';//ESTO NO SE PUEDE PORQUE LAS CADENAS TIENEN DIGITOS INMUTABLES
-    }
-    // console.log(cadenaCeros);
-
-    // const cadenaCerosUnos = cadenaCeros;
-
-    mascaraRedBinario = eliminarValorMascaraBinaria(cantidadCeros, mascaraRedBinario);
-    mascaraRedBinario.push(nuevoValor);
-    const mascaraRedBinarioString = mascaraRedBinario.join('');//Acá se forma una cadena de 0 y 1 de una cantidad de dígitos múltiplo de 8
-
-    console.log('Macara de Red, todos sus numeros binarios juntos: ', mascaraRedBinarioString)
-    const tamanioMascaraRedBinarioString = mascaraRedBinarioString.length;
-
-    console.log('Cantidad Elementos Mascara Red Binaria: ', tamanioMascaraRedBinarioString);
-
-    const cantidadNumerosNuevaMascara = tamanioMascaraRedBinarioString / 8;
-    console.log('Voy a dividir: ', cantidadNumerosNuevaMascara)
-    let nuevaMascaraRedBinario = [];
-    let indiceMenor = 0, indiceMayor = indiceMenor + 8, aux;
-
-    for(let i=0; i<cantidadNumerosNuevaMascara; i++) {
-
-        const numeroBinario = mascaraRedBinarioString.slice(indiceMenor, indiceMayor);
-        nuevaMascaraRedBinario.push(numeroBinario);
-        indiceMenor = indiceMayor;
-        indiceMayor = indiceMayor + 8;
-    }
-
-        console.log(nuevaMascaraRedBinario);
-
-    nuevaMascaraRedBinario.forEach((valor, index) => {
-        nuevaMascaraRedBinario[index] = parseInt(nuevaMascaraRedBinario[index], 2);
-
-    });
-
-    //AGREGAR ....
-
-    // if(cantidadCeros < 0) {
-    //     const cantidadUnos2 = Math.abs(cantidadCeros);
-    //     const cantidadCeros2 = 8 - cantidadUnos2;
-
-    // } 
+    const todosBitsMascaraSubred = agruparTodosBitsMacara(mascaraSubredBinario, cantidadCeros, nuevoValor);
     
-    // const cadenaUnos = formarCadena(cantidadUnos, '1');
-    // const cadenaCeros = formarCadena(cantidadCeros, '0');
-    // console.log(cadenaUnos);
-    // console.log(cadenaCeros);
-    // mascaraRedBinario.forEach((valor, index) => {
-    //     if(valor === '0') {
-    //         mascaraRedBinario[index] = `${cadenaUnos}${cadenaCeros}`;
-    //     }
-    // });
-    return nuevaMascaraRedBinario;
+    console.log('Macara de Red, todos sus numeros binarios juntos: ', todosBitsMascaraSubred)
 
+    const nuevaMascaraSubredBinario = formarNuevaMascaraBinario(todosBitsMascaraSubred);
+    const nuevaMascaraSubredDecimal = convertirDecimalNuevaMascara(nuevaMascaraSubredBinario);
 
+    return nuevaMascaraSubredDecimal;
 }
 
 const formarCadena = (cantidad, numeroAgregar) => {
@@ -176,4 +124,67 @@ const eliminarValorMascaraBinaria = (cantidad, mascaraRedBinario) => {
     return mascaraRedBinario;
 }
 
-formulario.addEventListener('submit', hallar);
+const hallarCantidadCeros = (mascaraSubredBinario) => {
+    let cantidadCeros = 0; 
+    mascaraSubredBinario.forEach(valor => {
+        if(valor === '0') {
+            cantidadCeros++;
+        }
+    });
+
+    console.log('Cantidad de CEROS en la mascara de subred original: ', cantidadCeros);
+    return cantidadCeros;
+}
+
+const agregarUnosCadenaCeros = (cadenaCeros, valorN) => {
+    let nuevoValor = '';
+    for(let i=0; i<cadenaCeros.length; i++) {
+        if(i <= valorN - 1) {
+            nuevoValor = nuevoValor + '1';
+        } else {
+            nuevoValor = nuevoValor + '0';
+        }
+    }
+
+    return nuevoValor;
+}
+
+const agruparTodosBitsMacara = (mascaraSubredBinario, cantidadCeros, nuevoValor) => {
+    mascaraSubredBinario = eliminarValorMascaraBinaria(cantidadCeros, mascaraSubredBinario);
+    mascaraSubredBinario.push(nuevoValor);
+    //Acá se forma una cadena de 0 y 1 de una cantidad de dígitos múltiplo de 8
+    const todosBitsMascaraSubred = mascaraSubredBinario.join('');
+
+    return todosBitsMascaraSubred;
+}
+
+const formarNuevaMascaraBinario = (todosBitsMascaraSubred) => {
+    const cantidadBitsMascaraSubred = todosBitsMascaraSubred.length;
+    
+    console.log('Cantidad Elementos Máscara Red Binaria: ', cantidadBitsMascaraSubred);
+
+    const cantidadNumerosNuevaMascara = cantidadBitsMascaraSubred / 8;
+    console.log('Voy a dividir: ', cantidadNumerosNuevaMascara)
+    let nuevaMascaraSubredBinario = [], indiceMenor = 0, indiceMayor = indiceMenor + 8;
+
+    for(let i=0; i<cantidadNumerosNuevaMascara; i++) {
+        const numeroBinario = todosBitsMascaraSubred.slice(indiceMenor, indiceMayor);
+        nuevaMascaraSubredBinario.push(numeroBinario);
+        indiceMenor = indiceMayor;
+        indiceMayor = indiceMayor + 8;
+    }
+
+    console.log(nuevaMascaraSubredBinario);
+    return nuevaMascaraSubredBinario;
+}
+
+const convertirDecimalNuevaMascara = (nuevaMascaraSubredBinario) => {
+    //Convertimos a Base 10 a cada Elemento del Array "nuevaMascaraSubredBinario"
+    nuevaMascaraSubredBinario.forEach((valor, index) => {
+        nuevaMascaraSubredBinario[index] = parseInt(nuevaMascaraSubredBinario[index], 2);
+    });
+
+    return nuevaMascaraSubredBinario;
+}
+
+formulario.addEventListener('submit', calcularDatos);
