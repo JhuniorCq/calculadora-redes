@@ -1,12 +1,32 @@
 
+.contenedor-regresar {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.volver-inicio {
+    /* display: block; */
+    margin-left: 60px;
+    height: 100%;
+}
+
+.volver-inicio i {
+    color: #26a69a;
+    font-size: 2.1rem;
+}
+
+.volver-inicio:hover i {
+    color: #26d0bf;
+}
+
 .introduccion {
-    margin: 0 15vw 3rem;
+    margin: 0 15vw 3.5rem;
 }
 
 .contenedor-titulo {
     width: 100%;
-    border: 1px solid green;
-    margin-bottom: 2rem;
+    /* border: 1px solid green; */
+    margin-bottom: 2.5rem;
 }
 
 .titulo {
@@ -15,11 +35,11 @@
 
 .contenedor-parrafo {
     width: 100%;
-    border: 1px solid yellow;
+    /* border: 1px solid yellow; */
 }
 
 .formulario {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -48,13 +68,12 @@
 }
 
 .etiqueta {
-    margin-bottom: 10px; /*10px*/
-    /* font-weight: 500; */
+    margin-bottom: -20px; /*10px*/
+    font-weight: bold;
+    color: #11897d;
 }
 
-/* .etiqueta:focus {
-    margin-bottom: 10px;
-} */
+
 
 .input {
     outline: none;
@@ -62,6 +81,8 @@
     border: none;
     border-bottom: 1px solid black;
     padding: 5px 0;
+    transition: border-bottom 0.3s ease-in-out;
+    transition: font-weight 0.3s ease-in-out;
 }
 
 .input:focus {

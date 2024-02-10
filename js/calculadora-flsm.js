@@ -1,5 +1,5 @@
 import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js';
-
+import {cambiarMarginLabel} from './detalles-flsm.js';
 const formulario = document.querySelector('.formulario');
 const direccionIpInput = document.getElementById('direccion-ip');
 const prefijoRedInput= document.getElementById('prefijo-red'); // Acá mostraré un dato
@@ -17,7 +17,7 @@ const calcularDatos = (evento) => {
     const numeroSubRedesValor = numeroSubRedesInput.value;  // 8
 
     //VALIDAR DATOS
-    if(!validarDireccionIP(direccionIPValor)/* || !validarNumeroSubRedes(numeroSubRedesValor)*/) {
+    if(!validarDireccionIP(direccionIPValor) || !validarNumeroSubRedes(numeroSubRedesValor)) {
         return;
     }
     
@@ -25,25 +25,11 @@ const calcularDatos = (evento) => {
     hallarPrefijoRed(direccionIPValor);
     prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
 
-    // return;
-    //LO PUEDO HACER EN OTRA FUNCIÓN CREO
     //PROCESO PARA HALLAR LOS HOSTS POR SUBRED
-    console.log('Número de Subredes ingresado: ', numeroSubRedesValor);
 
-    const mascaraSubred = datosRed.mascaraSubred;
-    const arrayNumerosMascara = mascaraSubred.split('.');
-    const mascaraSubredBinario = convertirBinario(mascaraSubred);
+    // NOS QUEDAMOS HALLANDO LA NUEVA MASCARA DE SUBRE -> EL PROCESO ESTÁ EN LA FUNCIÓN "hallarNumeroSubRedes"
+    hallarNumeroSubredes(numeroSubRedesValor);
     
-    console.log('Máscara red original decimal: ', arrayNumerosMascara)
-    console.log('Máscara red original binario: ', mascaraSubredBinario)
-
-    const valorN = hallarCantidadBits(numeroSubRedesValor); // FALTA VER SI EL NOMBRE DE VARIABLE TA BIEN
-    console.log('Valor de N: ', valorN)
-
-    // Esta función me devuelve la NUEVA MÁSCADA DE SUBRED (EN DECIMAL)
-    const nuevaMascaraSubredDecimal = obtenerNuevaMascaraSubred(valorN, mascaraSubredBinario);
-    console.log(nuevaMascaraSubredDecimal);
-
     
 }
 
@@ -64,6 +50,26 @@ const hallarPrefijoRed = (direccionIPValor) => {
         datosRed.prefijoRed = 24;
         datosRed.mascaraSubred = '255.255.255.0'; //Se asigna la Máscara de Subred Original
     }
+}
+
+const hallarNumeroSubredes = (numeroSubRedesValor) => {
+    console.log('Número de Subredes ingresado: ', numeroSubRedesValor);
+
+    const mascaraSubred = datosRed.mascaraSubred;
+    const arrayNumerosMascara = mascaraSubred.split('.');
+    const mascaraSubredBinario = convertirBinario(mascaraSubred);
+    
+    console.log('Máscara red original decimal: ', arrayNumerosMascara)
+    console.log('Máscara red original binario: ', mascaraSubredBinario)
+
+    const valorN = hallarCantidadBits(numeroSubRedesValor); // FALTA VER SI EL NOMBRE DE VARIABLE TA BIEN
+    console.log('Valor de N: ', valorN)
+
+    // Esta función me devuelve la NUEVA MÁSCADA DE SUBRED (EN DECIMAL)
+    const nuevaMascaraSubredDecimal = obtenerNuevaMascaraSubred(valorN, mascaraSubredBinario);
+    console.log(nuevaMascaraSubredDecimal);
+
+    // AHORA DEBEMOS SEGUIR PARA HALLAR EL NÚMERO DE SUBREDES
 }
 
 const convertirBinario = (mascaraRed) => {
@@ -194,7 +200,18 @@ const mostrarPrefijoRed = () => {
     hallarPrefijoRed(direccionIPValor);
 
     prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
+
+    cambiarMarginLabel(direccionIpInput, prefijoRedInput);
+}
+
+const funcion = () => {
+    //PROCESO PARA HALLAR EL NÚMERO DE SUBREDES
+
+    //MOSTRAR AL USUARIO EL NÚMERO DE SUBREDES
+
+    cambiarMarginLabel(numeroSubRedesInput, hostsSubRedInput);
 }
 
 formulario.addEventListener('submit', calcularDatos);
 direccionIpInput.addEventListener('input', mostrarPrefijoRed);
+numeroSubRedesInput.addEventListener('input', funcion);
