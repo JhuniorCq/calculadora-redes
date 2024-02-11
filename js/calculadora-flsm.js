@@ -131,17 +131,9 @@ const hallarVariasDireccionesIP = () => {
     const nuevaMascaraSubredBinario = nuevaMascaraSubredDecimal.map(elemento => elemento.toString(2));
     
     const arrayCadenaOchoBits = arraySubcadenas.map((elemento, index) => {
-        const cadenaOchoBits = cadenaCeritos.concat(elemento);
-        console.log('aaaa', cadenaOchoBits) // HASTA ACÁ TAMOS BIEN
+        const cadenaOchoBits = elemento.concat(cadenaCeritos);
+        console.log('aaaa', cadenaOchoBits) 
 
-        // console.log('nueva Macara', nuevaMascaraSubredBinario)
-        // let aaa = nuevaMascaraSubredBinario;
-
-        // // // const numeroDecimal = parseInt(cadenaOchoBits, 2); // Aún no lo convertiré a DECIMAL
-        
-        // aaa = eliminarValorMascara(cantidadDiferente255, aaa);
-        // aaa.push(cadenaOchoBits);
-        // console.log('a', aaa)
         return cadenaOchoBits;
     });
 
@@ -150,31 +142,32 @@ const hallarVariasDireccionesIP = () => {
     let nuevaMascaraSinUltimosCeros = eliminarValorMascara(cantidadDiferente255, nuevaMascaraSubredBinario);
     console.log('nuevaMascaraSinUltimosCeros: ', nuevaMascaraSinUltimosCeros)
     //AHORA TAMOS ACA :,V
-    let arrayNEW = [];
-    for(let i=0; i<arrayCadenaOchoBits.length; i++) {
-        nuevaMascaraSinUltimosCeros.push(arrayCadenaOchoBits[i]);
-        console.log(arrayCadenaOchoBits[i])
-        console.log(nuevaMascaraSinUltimosCeros)
-        //USAR ESTE OPERADOR ERA LA SOLUCIOOOOOOOOOOOOON, ES QUE EL POP Y PUSH ACCEDEN A MEMORIA :,V
-        const uf = [...nuevaMascaraSinUltimosCeros];
-        arrayNEW.push(uf);
-        nuevaMascaraSinUltimosCeros.pop();
-    }
 
-    console.log('arrayEW: ', arrayNEW)
-    // const ads = arrayCadenaOchoBits.map((cadenaOchoBits, index) => {
-    //     console.log('pepepepe', nuevaMascaraSinUltimosCeros)
-    //     let xdd = nuevaMascaraSinUltimosCeros;
-    //     xdd.push(cadenaOchoBits)
-    //     console.log('Este es xdd: ', xdd)
-    //     return xdd;
-    // });
+    const matrizArrayCadenasBits = arrayCadenaOchoBits.map((cadenaOchoBits, index) => {
+        let xdd = [...nuevaMascaraSinUltimosCeros];
+        xdd.push(cadenaOchoBits)
+        return xdd;
+    });
 
-    // console.log('Lafe', ads)
+    console.log('Lafe', matrizArrayCadenasBits)
+
+    const matrizArrayBitsMultiploOcho = matrizArrayCadenasBits.map((array) => array.join(''))
+
+    console.log(matrizArrayBitsMultiploOcho)
+
+    //La funcion se llama así, pero no será para formar la Nueva Mascara Binario, solo estoy reutilizando la funcion
+    const matrizArrayDireccionsIpBinario = matrizArrayBitsMultiploOcho.map(arrayBitsMultiplo8 => formarNuevaMascaraBinario(arrayBitsMultiplo8));
+
+    console.log(matrizArrayDireccionsIpBinario);
+
+    const matrizArrayDireccionesIpDecimal = matrizArrayDireccionsIpBinario.map(arrayDireccionIpBinario => {
+        console.log(arrayDireccionIpBinario)
+        const aaa = arrayDireccionIpBinario.map(direccionIP => parseInt(direccionIP, 2));
+        return aaa;
+    });
+    console.log(matrizArrayDireccionesIpDecimal) // HASTA ACÁ TAMOS BIEN, YA ME BOTA UNA MATRIZ CON ARRAYS QUE CONTIENEN LOS OCTETOS DE CADA IP
+
     
-
-    //TAMOOOOOOOOOOS ACAAAAAAAAAAAAAA
-
 }
 
 const formarObjetoDatosHallarVariasIP = (valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal) => {
