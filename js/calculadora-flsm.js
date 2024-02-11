@@ -6,7 +6,7 @@ const prefijoRedInput= document.getElementById('prefijo-red'); // Acá mostraré
 const numeroSubRedesInput = document.getElementById('numero-subredes');
 const hostsSubRedInput = document.getElementById('hosts-subred'); // Acá mostraré un dato
 const datosRed = {};
-// let cantidadBitsSubred, cantidadBitsHostSubred, cantidadSubredesCreadas;
+const datosHallarVariasIP = {} //DE AHÍ DEBO ASIGNARLE OTRO NOMBRE
 
 //IP DE EJEMPLO: 192.168.200.139
 const calcularDatos = (evento) => {
@@ -29,7 +29,7 @@ const calcularDatos = (evento) => {
     const cantidadHostsSubRed = hallarNumeroSubredes(numeroSubRedesValor);
     hostsSubRedInput.value = cantidadHostsSubRed; //Mostramos al Usuario la Cantidad de Subredes obtenida
     
-
+    hallarVariasDireccionesIP();
 
 }
 
@@ -63,24 +63,130 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     console.log('Máscara red original binario: ', mascaraSubredBinario)
 
     const valorN = hallarCantidadBits(numeroSubRedesValor); // valorN representa la cantidad UNOS
-    console.log('Valor de N: ', valorN)
+    console.log('Valor de N: ', valorN);
 
     // Esta función me devuelve la NUEVA MÁSCADA DE SUBRED (EN DECIMAL)
     const nuevaMascaraSubredDecimal = obtenerNuevaMascaraSubred(valorN, mascaraSubredBinario);
     console.log(nuevaMascaraSubredDecimal);
 
     // AHORA DEBEMOS SEGUIR PARA HALLAR EL NÚMERO DE SUBREDES
-    const cantidadCeros = hallarNumeroCeros(valorN, datosRed.claseRed);
+    const cantidadCeros = hallarNumeroCeros(valorN);
     console.log(cantidadCeros);
 
     const cantidadHostsSubRed = calcularCantidadHostsSubred(cantidadCeros);
     console.log('Cantidad hosts por subred: ', cantidadHostsSubRed)
 
+    //ACÁ FORMARÉ AL OBJETO QUE CONTENDRÁ LOS DATOS QUE ME DARÁN UN CONJUNTO DE DIRECCIONES IP -> ESTO PUEDE IR MÁS ABAJO
+    formarObjetoDatosHallarVariasIP(valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal);
+    
+
     return cantidadHostsSubRed;
 }
 
-const hallarNumeroCeros = (valorN, claseRed) => {
+const hallarVariasDireccionesIP = () => {
+    const valorN = datosHallarVariasIP.valorN;
+    const numeroSubRedesValor = datosHallarVariasIP.numeroSubRedesValor;
+    const nuevaMascaraSubredDecimal = datosHallarVariasIP.nuevaMascaraSubredDecimal;
+    const mascaraSubred = datosHallarVariasIP.mascaraSubred; // Si es Clase C -> 255.255.255.0
+
+    console.log(mascaraSubred)
+    console.log(valorN)
+    console.log(numeroSubRedesValor)
+    console.log('xD', nuevaMascaraSubredDecimal)
+
+    let /*nuevoValor = '',*/ cantidadDiferente255 = 0;
+
+    nuevaMascaraSubredDecimal.forEach((elemento) => {
+        if(elemento !== 255) {
+            // nuevoValor += elemento.toString(2); // Esto lo puedo comentar
+            cantidadDiferente255++;
+            //AUNQUE PUEDO SOLO HALLAR ESTA CANTIDAD Y LUEGO FORMO UNA CADENA DE 8*cantidadDiferente255 CARACTERES
+        }
+    })
+
+    const nuevaCadena = formarCadena(cantidadDiferente255*8, '0');
+
+    // console.log(nuevoValor, cantidadDiferente255);
+    console.log(nuevaCadena, cantidadDiferente255);
+
+    // const subCadena = nuevaCadena.slice(0, valorN);
+    // console.log('Subcadena: ', subCadena);
+
+    let arraySubcadenas = [];
+
+    for(let i=0; i<numeroSubRedesValor; i++) {
+        let numeroBinario = i.toString(2);
+        
+        while(numeroBinario.length < valorN) {
+            numeroBinario = '0'.concat(numeroBinario);
+        }
+
+        console.log(numeroBinario);
+        arraySubcadenas.push(numeroBinario);
+    }
+    console.log(arraySubcadenas);
+
+    const cadenaCeritos = formarCadena(cantidadDiferente255*8 - valorN, '0');
+
+    const nuevaMascaraSubredBinario = nuevaMascaraSubredDecimal.map(elemento => elemento.toString(2));
+    
+    const arrayCadenaOchoBits = arraySubcadenas.map((elemento, index) => {
+        const cadenaOchoBits = cadenaCeritos.concat(elemento);
+        console.log('aaaa', cadenaOchoBits) // HASTA ACÁ TAMOS BIEN
+
+        // console.log('nueva Macara', nuevaMascaraSubredBinario)
+        // let aaa = nuevaMascaraSubredBinario;
+
+        // // // const numeroDecimal = parseInt(cadenaOchoBits, 2); // Aún no lo convertiré a DECIMAL
+        
+        // aaa = eliminarValorMascara(cantidadDiferente255, aaa);
+        // aaa.push(cadenaOchoBits);
+        // console.log('a', aaa)
+        return cadenaOchoBits;
+    });
+
+    console.log(arrayCadenaOchoBits)
+
+    let nuevaMascaraSinUltimosCeros = eliminarValorMascara(cantidadDiferente255, nuevaMascaraSubredBinario);
+    console.log('nuevaMascaraSinUltimosCeros: ', nuevaMascaraSinUltimosCeros)
+    //AHORA TAMOS ACA :,V
+    let arrayNEW = [];
+    for(let i=0; i<arrayCadenaOchoBits.length; i++) {
+        nuevaMascaraSinUltimosCeros.push(arrayCadenaOchoBits[i]);
+        console.log(arrayCadenaOchoBits[i])
+        console.log(nuevaMascaraSinUltimosCeros)
+        //USAR ESTE OPERADOR ERA LA SOLUCIOOOOOOOOOOOOON, ES QUE EL POP Y PUSH ACCEDEN A MEMORIA :,V
+        const uf = [...nuevaMascaraSinUltimosCeros];
+        arrayNEW.push(uf);
+        nuevaMascaraSinUltimosCeros.pop();
+    }
+
+    console.log('arrayEW: ', arrayNEW)
+    // const ads = arrayCadenaOchoBits.map((cadenaOchoBits, index) => {
+    //     console.log('pepepepe', nuevaMascaraSinUltimosCeros)
+    //     let xdd = nuevaMascaraSinUltimosCeros;
+    //     xdd.push(cadenaOchoBits)
+    //     console.log('Este es xdd: ', xdd)
+    //     return xdd;
+    // });
+
+    // console.log('Lafe', ads)
+    
+
+    //TAMOOOOOOOOOOS ACAAAAAAAAAAAAAA
+
+}
+
+const formarObjetoDatosHallarVariasIP = (valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal) => {
+    datosHallarVariasIP.valorN = valorN;
+    datosHallarVariasIP.numeroSubRedesValor = numeroSubRedesValor;
+    datosHallarVariasIP.nuevaMascaraSubredDecimal = nuevaMascaraSubredDecimal;
+    datosHallarVariasIP.mascaraSubred = datosRed.mascaraSubred;
+}
+
+const hallarNumeroCeros = (valorN) => {
     let cantidadBits; //Dependen de la Clase el Prefijo de Red tenrá 1, 2 o 3 CEROS
+    const claseRed = datosRed.claseRed;
 
     if(claseRed === 'A') {
         cantidadBits = 24;
@@ -147,12 +253,12 @@ const formarCadena = (cantidad, numeroAgregar) => {
     return resultado;
 }
 
-const eliminarValorMascaraBinaria = (cantidad, mascaraRedBinario) => {
+const eliminarValorMascara = (cantidad, mascaraRed) => {
     for(let i=0; i<cantidad; i++) {
-        mascaraRedBinario.pop();
+        mascaraRed.pop();
     }
 
-    return mascaraRedBinario;
+    return mascaraRed;
 }
 
 const hallarCantidadOctetoCeros = (mascaraSubredBinario) => {
@@ -181,7 +287,7 @@ const agregarUnosCadenaCeros = (cadenaCeros, valorN) => {
 }
 
 const agruparTodosBitsMacara = (mascaraSubredBinario, cantidadCeros, nuevoValor) => {
-    mascaraSubredBinario = eliminarValorMascaraBinaria(cantidadCeros, mascaraSubredBinario);
+    mascaraSubredBinario = eliminarValorMascara(cantidadCeros, mascaraSubredBinario);
     mascaraSubredBinario.push(nuevoValor);
     //Acá se forma una cadena de 0 y 1 de una cantidad de dígitos múltiplo de 8
     const todosBitsMascaraSubred = mascaraSubredBinario.join('');
