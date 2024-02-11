@@ -23,14 +23,14 @@ const calcularDatos = (evento) => {
     
     //Acá asignamos la Clase, el Prefijo de Red y la Máscara de Red al Objeto "datosRed"
     hallarPrefijoRed(direccionIPValor);
-    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
+    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario el Prefijo de Red obtenido
 
     //PROCESO PARA HALLAR LOS HOSTS POR SUBRED
+    const cantidadHostsSubRed = hallarNumeroSubredes(numeroSubRedesValor);
+    hostsSubRedInput.value = cantidadHostsSubRed; //Mostramos al Usuario la Cantidad de Subredes obtenida
+    
 
-    // NOS QUEDAMOS HALLANDO LA NUEVA MASCARA DE SUBRE -> EL PROCESO ESTÁ EN LA FUNCIÓN "hallarNumeroSubRedes"
-    hallarNumeroSubredes(numeroSubRedesValor);
-    
-    
+
 }
 
 const hallarPrefijoRed = (direccionIPValor) => {
@@ -62,7 +62,7 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     console.log('Máscara red original decimal: ', arrayNumerosMascara)
     console.log('Máscara red original binario: ', mascaraSubredBinario)
 
-    const valorN = hallarCantidadBits(numeroSubRedesValor); // FALTA VER SI EL NOMBRE DE VARIABLE TA BIEN
+    const valorN = hallarCantidadBits(numeroSubRedesValor); // valorN representa la cantidad UNOS
     console.log('Valor de N: ', valorN)
 
     // Esta función me devuelve la NUEVA MÁSCADA DE SUBRED (EN DECIMAL)
@@ -70,6 +70,32 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     console.log(nuevaMascaraSubredDecimal);
 
     // AHORA DEBEMOS SEGUIR PARA HALLAR EL NÚMERO DE SUBREDES
+    const cantidadCeros = hallarNumeroCeros(valorN, datosRed.claseRed);
+    console.log(cantidadCeros);
+
+    const cantidadHostsSubRed = calcularCantidadHostsSubred(cantidadCeros);
+    console.log('Cantidad hosts por subred: ', cantidadHostsSubRed)
+
+    return cantidadHostsSubRed;
+}
+
+const hallarNumeroCeros = (valorN, claseRed) => {
+    let cantidadBits; //Dependen de la Clase el Prefijo de Red tenrá 1, 2 o 3 CEROS
+
+    if(claseRed === 'A') {
+        cantidadBits = 24;
+        return cantidadBits - valorN;
+    } else if(claseRed === 'B') {
+        cantidadBits = 16;
+        return cantidadBits - valorN;
+    } else {
+        cantidadBits = 8;
+        return cantidadBits - valorN;
+    }
+}
+
+const calcularCantidadHostsSubred = (cantidadCeros) => {
+    return Math.pow(2, cantidadCeros) - 2;
 }
 
 const convertirBinario = (mascaraRed) => {
@@ -95,9 +121,9 @@ const hallarCantidadBits = (numeroSubRedesValor) => {
 }
 
 const obtenerNuevaMascaraSubred = (valorN, mascaraSubredBinario) => {
-    const cantidadCeros = hallarCantidadCeros(mascaraSubredBinario);
+    const cantidadCeros = hallarCantidadOctetoCeros(mascaraSubredBinario); // [11111111, 11111111, 11111111, 0] -> habría un CERO
     const cadenaCeros = formarCadena(cantidadCeros*8, '0'); //Formamos una cadena con una cantidad de CEROS múltiplo de 8
-    const nuevoValor = agregarUnosCadenaCeros(cadenaCeros, valorN);
+    const nuevoValor = agregarUnosCadenaCeros(cadenaCeros, valorN); //11100000
 
     console.log(`Se eliminará los ${cantidadCeros} últimos ceros y se agregará esto: ${nuevoValor}`);
 
@@ -129,7 +155,7 @@ const eliminarValorMascaraBinaria = (cantidad, mascaraRedBinario) => {
     return mascaraRedBinario;
 }
 
-const hallarCantidadCeros = (mascaraSubredBinario) => {
+const hallarCantidadOctetoCeros = (mascaraSubredBinario) => {
     let cantidadCeros = 0; 
     mascaraSubredBinario.forEach(valor => {
         if(valor === '0') {
@@ -195,23 +221,25 @@ const convertirDecimalNuevaMascara = (nuevaMascaraSubredBinario) => {
 //Con esto mostraremos el Prefijo de Red, pero de manera dinámica
 const mostrarPrefijoRed = () => {
     //PROCESO PARA HALLAR EL PREFIJO DE RED
-    const direccionIPValor = direccionIpInput.value;    // '192.168.200.139'
+    const direccionIpValor = direccionIpInput.value;    // '192.168.200.139'
 
-    hallarPrefijoRed(direccionIPValor);
+    hallarPrefijoRed(direccionIpValor);
 
     prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
 
     cambiarMarginLabel(direccionIpInput, prefijoRedInput);
 }
 
-const funcion = () => {
+const mostrarNumeroSubredes = () => {
     //PROCESO PARA HALLAR EL NÚMERO DE SUBREDES
-
+    // const hostsSubRedInput = hostsSubRedInput.value;
+    // console.log();
+    //->
+    //REPETIR EL PROCESO DE HALLAR LA CANTIDAD DE HOST POR SUB RED YA NO SERÁ NECESARIO
     //MOSTRAR AL USUARIO EL NÚMERO DE SUBREDES
-
     cambiarMarginLabel(numeroSubRedesInput, hostsSubRedInput);
 }
 
 formulario.addEventListener('submit', calcularDatos);
 direccionIpInput.addEventListener('input', mostrarPrefijoRed);
-numeroSubRedesInput.addEventListener('input', funcion);
+numeroSubRedesInput.addEventListener('input', mostrarNumeroSubredes);
