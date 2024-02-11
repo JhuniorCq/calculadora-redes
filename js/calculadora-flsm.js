@@ -94,25 +94,15 @@ const hallarVariasDireccionesIP = () => {
     console.log(numeroSubRedesValor)
     console.log('xD', nuevaMascaraSubredDecimal)
 
-    let /*nuevoValor = '',*/ cantidadDiferente255 = 0;
+    let cantidadDiferente255 = 0;
 
     nuevaMascaraSubredDecimal.forEach((elemento) => {
         if(elemento !== 255) {
-            // nuevoValor += elemento.toString(2); // Esto lo puedo comentar
             cantidadDiferente255++;
-            //AUNQUE PUEDO SOLO HALLAR ESTA CANTIDAD Y LUEGO FORMO UNA CADENA DE 8*cantidadDiferente255 CARACTERES
         }
     })
 
-    const nuevaCadena = formarCadena(cantidadDiferente255*8, '0');
-
-    // console.log(nuevoValor, cantidadDiferente255);
-    console.log(nuevaCadena, cantidadDiferente255);
-
-    // const subCadena = nuevaCadena.slice(0, valorN);
-    // console.log('Subcadena: ', subCadena);
-
-    let arraySubcadenas = [];
+    let arraySubcadenasNdigitos = [];
 
     for(let i=0; i<numeroSubRedesValor; i++) {
         let numeroBinario = i.toString(2);
@@ -122,38 +112,37 @@ const hallarVariasDireccionesIP = () => {
         }
 
         console.log(numeroBinario);
-        arraySubcadenas.push(numeroBinario);
+        arraySubcadenasNdigitos.push(numeroBinario);
     }
-    console.log(arraySubcadenas);
+    console.log(`Array subcadenas de ${valorN} digitos: `, arraySubcadenasNdigitos);
 
-    const cadenaCeritos = formarCadena(cantidadDiferente255*8 - valorN, '0');
+    const cadenaCeros = formarCadena(cantidadDiferente255*8 - valorN, '0');
 
     const nuevaMascaraSubredBinario = nuevaMascaraSubredDecimal.map(elemento => elemento.toString(2));
     
-    const arrayCadenaOchoBits = arraySubcadenas.map((elemento, index) => {
-        const cadenaOchoBits = elemento.concat(cadenaCeritos);
+    const arrayCadenaMultiploOchoBits = arraySubcadenasNdigitos.map(elemento => {
+        const cadenaOchoBits = elemento.concat(cadenaCeros);
         console.log('aaaa', cadenaOchoBits) 
 
         return cadenaOchoBits;
     });
 
-    console.log(arrayCadenaOchoBits)
+    console.log(arrayCadenaMultiploOchoBits)
 
-    let nuevaMascaraSinUltimosCeros = eliminarValorMascara(cantidadDiferente255, nuevaMascaraSubredBinario);
+    const nuevaMascaraSinUltimosCeros = eliminarValorMascara(cantidadDiferente255, nuevaMascaraSubredBinario);
     console.log('nuevaMascaraSinUltimosCeros: ', nuevaMascaraSinUltimosCeros)
-    //AHORA TAMOS ACA :,V
 
-    const matrizArrayCadenasBits = arrayCadenaOchoBits.map((cadenaOchoBits, index) => {
-        let xdd = [...nuevaMascaraSinUltimosCeros];
-        xdd.push(cadenaOchoBits)
-        return xdd;
+    const matrizArrayCadenasBits = arrayCadenaMultiploOchoBits.map((cadenaOchoBits) => {
+        const nuevaMascaraSinUltimosCerosCopia = [...nuevaMascaraSinUltimosCeros];
+        nuevaMascaraSinUltimosCerosCopia.push(cadenaOchoBits)
+        return nuevaMascaraSinUltimosCerosCopia;
     });
 
     console.log('Lafe', matrizArrayCadenasBits)
 
     const matrizArrayBitsMultiploOcho = matrizArrayCadenasBits.map((array) => array.join(''))
 
-    console.log(matrizArrayBitsMultiploOcho)
+    console.log('matrizArrayBitsMultiploOcho', matrizArrayBitsMultiploOcho)
 
     //La funcion se llama así, pero no será para formar la Nueva Mascara Binario, solo estoy reutilizando la funcion
     const matrizArrayDireccionsIpBinario = matrizArrayBitsMultiploOcho.map(arrayBitsMultiplo8 => formarNuevaMascaraBinario(arrayBitsMultiplo8));
@@ -167,7 +156,7 @@ const hallarVariasDireccionesIP = () => {
     });
     console.log(matrizArrayDireccionesIpDecimal) // HASTA ACÁ TAMOS BIEN, YA ME BOTA UNA MATRIZ CON ARRAYS QUE CONTIENEN LOS OCTETOS DE CADA IP
 
-    
+
 }
 
 const formarObjetoDatosHallarVariasIP = (valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal) => {
