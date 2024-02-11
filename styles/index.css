@@ -12,6 +12,7 @@
     padding: 40px 0;
     width: 60vw;
     max-width: 700px;
+    min-width: 350px;
     border:none;
     border-radius: 15px;
     display: flex;
@@ -21,6 +22,7 @@
     background-color: #fafafa10;
     backdrop-filter: blur(0.4rem);
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
 }
 
 .titulo {
@@ -38,10 +40,26 @@
     justify-content: space-around;
 }
 
+@media screen and (max-width: 450px){
+    /* .contenedor2 {
+        
+    } */
+
+    /* TAMOS VIENDO EL RESPONSIVOOOO */
+
+    .img-calculadora {
+        width: 50px;
+    }
+}
+
 @media screen and (max-width: 650px){
     .contenedor-opciones {
         flex-direction: column;
 
+    }
+
+    .titulo {
+        margin-bottom: 20px;
     }
 
     .contenedor-opcion {
@@ -54,6 +72,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.img-calculadora {
+    width: 150px;
 }
 
 .img-calculadora:hover {
