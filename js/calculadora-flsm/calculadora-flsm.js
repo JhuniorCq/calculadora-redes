@@ -156,7 +156,8 @@ const hallarVariasDireccionesIP = () => {
     });
     console.log(matrizArrayDireccionesIpDecimal) // HASTA ACÁ TAMOS BIEN, YA ME BOTA UNA MATRIZ CON ARRAYS QUE CONTIENEN LOS OCTETOS DE CADA IP
 
-
+    //LO QUE QUEDARÍA POR HACER ES ORDENAR TODO ESTO EN FUNCIONES Y MOSTRARLO EN EL FRONT
+    //SI SE PUEDE SERÍA MEJOR CREAR ARCHIVOS SEPARADOS PARA LAS FUNCIONES Y LUEGO SOLO LLAMARLAS ACÁ
 }
 
 const formarObjetoDatosHallarVariasIP = (valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal) => {
