@@ -1,7 +1,7 @@
 import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js';
 import {cambiarMarginLabel} from './detalles-flsm.js';
 import {hallarPrefijoRed} from './hallarPrefijoRed.js';
-import {hallarNumeroCeros, calcularCantidadHostsSubred, convertirBinarioMascaraSubred, hallarCantidadBits, formarCadena, eliminarValorMascara, /*hallarCantidadOctetoCeros, agregarUnosCadenaCeros, agruparTodosBitsMacara, convertirDecimalNuevaMascara, */formarNuevaMascaraBinario, obtenerNuevaMascaraSubred} from './operaciones-flsm.js';
+import {hallarNumeroCeros, calcularCantidadHostsSubred, convertirBinarioMascaraSubred, hallarCantidadBits, formarCadena, eliminarValorMascara, formarNuevaMascaraBinario, obtenerNuevaMascaraSubred} from './operaciones-flsm.js';
 import {formarObjetoDatosHallarVariasIP} from './hallarConjuntoDireccionesIp.js';
 const formulario = document.querySelector('.formulario');
 const direccionIpInput = document.getElementById('direccion-ip');
