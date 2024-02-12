@@ -1,5 +1,6 @@
 import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js';
 import {cambiarMarginLabel} from './detalles-flsm.js';
+// import {saludar, hallarPrefijoRed} from './hallarPrefijoRed.js';
 const formulario = document.querySelector('.formulario');
 const direccionIpInput = document.getElementById('direccion-ip');
 const prefijoRedInput= document.getElementById('prefijo-red'); // Acá mostraré un dato
@@ -7,6 +8,8 @@ const numeroSubRedesInput = document.getElementById('numero-subredes');
 const hostsSubRedInput = document.getElementById('hosts-subred'); // Acá mostraré un dato
 const datosRed = {};
 const datosHallarVariasIP = {} //DE AHÍ DEBO ASIGNARLE OTRO NOMBRE
+
+// saludar('Jhunior');
 
 //IP DE EJEMPLO: 192.168.200.139
 const calcularDatos = (evento) => {
@@ -22,8 +25,7 @@ const calcularDatos = (evento) => {
     }
     
     //Acá asignamos la Clase, el Prefijo de Red y la Máscara de Red al Objeto "datosRed"
-    hallarPrefijoRed(direccionIPValor);
-    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario el Prefijo de Red obtenido
+    hallarPrefijoRed(direccionIPValor, datosRed);
 
     //PROCESO PARA HALLAR LOS HOSTS POR SUBRED
     const cantidadHostsSubRed = hallarNumeroSubredes(numeroSubRedesValor);
@@ -50,6 +52,7 @@ const hallarPrefijoRed = (direccionIPValor) => {
         datosRed.prefijoRed = 24;
         datosRed.mascaraSubred = '255.255.255.0'; //Se asigna la Máscara de Subred Original
     }
+    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario el Prefijo de Red obtenido
 }
 
 const hallarNumeroSubredes = (numeroSubRedesValor) => {
@@ -79,7 +82,6 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     //ACÁ FORMARÉ AL OBJETO QUE CONTENDRÁ LOS DATOS QUE ME DARÁN UN CONJUNTO DE DIRECCIONES IP -> ESTO PUEDE IR MÁS ABAJO
     formarObjetoDatosHallarVariasIP(valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal);
     
-
     return cantidadHostsSubRed;
 }
 
