@@ -1,16 +1,10 @@
 
+//Este objeto es declarado en 'calculadora-flsm.js' y acá lo rellenaré con valores;
+import {datosRed, prefijoRedInput} from './calculadora-flsm.js';
 
-
-
-
-const saludar = (nombre) => {
-    console.log(`Hola ${nombre}`);
-}
-
-const hallarPrefijoRed = (direccionIPValor, datosRed) => {
+const hallarPrefijoRed = (direccionIPValor) => {
     const arrayNumerosIP = direccionIPValor.split('.');     // ['192', '168', '200', '139']
     const primerNumero = arrayNumerosIP[0];     // '192'
-    // const datosRed = {}
 
     if(primerNumero >= 0 && primerNumero <= 127) {
         datosRed.claseRed = 'A';
@@ -25,8 +19,7 @@ const hallarPrefijoRed = (direccionIPValor, datosRed) => {
         datosRed.prefijoRed = 24;
         datosRed.mascaraSubred = '255.255.255.0'; //Se asigna la Máscara de Subred Original
     }
-
-    return datosRed;
+    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario el Prefijo de Red obtenido
 }
 
-export {saludar, hallarPrefijoRed};
+export {hallarPrefijoRed};
