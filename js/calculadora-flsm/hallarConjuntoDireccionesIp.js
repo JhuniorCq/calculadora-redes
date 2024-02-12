@@ -39,7 +39,7 @@ const hallarVariasDireccionesIP = () => {
     arrayNumerosDireccionIpValor = arrayNumerosDireccionIpValor.map(octeto => parseInt(octeto));
 
     const matrizArrayDireccionesIP = matrizArrayPseudoDireccionesIpDecimal.map(array => [...array]);
-    // console.log(matrizArrayPseudoDireccionesIP)
+
     // for(let i=0; i<matrizArrayPseudoDireccionesIP.length; i++) {
     //     for(let j=0; j<4; j++) {
     //         if(j < cantidadIgual255) {
