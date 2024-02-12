@@ -1,4 +1,4 @@
-import {datosRed} from './calculadora-flsm.js'
+import {datosRed, direccionIpInput} from './calculadora-flsm.js'
 
 const hallarNumeroCeros = (valorN) => {
     let cantidadBits; //Dependen de la Clase el Prefijo de Red tenrá 1, 2 o 3 CEROS
@@ -101,6 +101,9 @@ const obtenerNuevaMascaraSubred = (valorN, mascaraSubredBinario) => {
 
     console.log(`Se eliminará los ${cantidadCeros} últimos ceros y se agregará esto: ${nuevoValor}`);
 
+    //ACÁ NO DEBO PASARLE LA MASCARA DE SUB RED EN BINARIO, debo pasarle la DIRECCIÓN IP INGRESADA
+    // const direccionIPValor = direccionIpInput.value; // ESTO AÚN NO VA ACÁ
+
     const todosBitsMascaraSubred = agruparTodosBitsMacara(mascaraSubredBinario, cantidadCeros, nuevoValor);
     
     console.log('Macara de Red, todos sus numeros binarios juntos: ', todosBitsMascaraSubred)
@@ -140,6 +143,85 @@ const formarNuevaMascaraBinario = (todosBitsMascaraSubred) => {
     return nuevaMascaraSubredBinario;
 }
 
+//FUNCIONES PARA HALLAR VARIAS DIRECCIONES IP
 
+const hallarCantidadDiferente255 = (nuevaMascaraSubredDecimal) => {
+    let cantidadDiferente255 = 0;
 
-export {hallarNumeroCeros, calcularCantidadHostsSubred, convertirBinarioMascaraSubred, hallarCantidadBits, formarCadena, eliminarValorMascara, /*hallarCantidadOctetoCeros,*/ agregarUnosCadenaCeros, agruparTodosBitsMacara, obtenerNuevaMascaraSubred, convertirDecimalNuevaMascara, formarNuevaMascaraBinario};
+    nuevaMascaraSubredDecimal.forEach((elemento) => {
+        if(elemento !== 255) {
+            cantidadDiferente255++;
+        }
+    })
+
+    return cantidadDiferente255;
+}
+
+const formarArraySubcadenasNdigitos = (numeroSubRedesValor, valorN) => {
+    let arraySubcadenasNdigitos = [];
+
+    for(let i=0; i<numeroSubRedesValor; i++) {
+        let numeroBinario = i.toString(2);
+        
+        while(numeroBinario.length < valorN) {
+            numeroBinario = '0'.concat(numeroBinario);
+        }
+
+        console.log(numeroBinario);
+        arraySubcadenasNdigitos.push(numeroBinario);
+    }
+    console.log(`Array subcadenas de ${valorN} digitos: `, arraySubcadenasNdigitos);
+
+    return arraySubcadenasNdigitos;
+}
+
+const agregarCerosSubcadenasNdigitos = (cantidadDiferente255, valorN, /*nuevaMascaraSubredDecimal,*/ arraySubcadenasNdigitos) => {
+    const cadenaCeros = formarCadena(cantidadDiferente255*8 - valorN, '0');
+
+    const arrayCadenaMultiploOchoBits = arraySubcadenasNdigitos.map(elemento => {
+        const cadenaOchoBits = elemento.concat(cadenaCeros);
+        console.log('aaaa', cadenaOchoBits) 
+
+        return cadenaOchoBits;
+    });
+
+    console.log(arrayCadenaMultiploOchoBits)
+
+    return arrayCadenaMultiploOchoBits;
+}
+
+const formarMatrizArrayBitsMultiploOcho = (cantidadDiferente255, nuevaMascaraSubredBinario, arrayCadenaMultiploOchoBits) => {
+    const nuevaMascaraSinUltimosCeros = eliminarValorMascara(cantidadDiferente255, nuevaMascaraSubredBinario);
+    console.log('nuevaMascaraSinUltimosCeros: ', nuevaMascaraSinUltimosCeros)
+
+    const matrizArrayCadenasBits = arrayCadenaMultiploOchoBits.map((cadenaOchoBits) => {
+        const nuevaMascaraSinUltimosCerosCopia = [...nuevaMascaraSinUltimosCeros];
+        nuevaMascaraSinUltimosCerosCopia.push(cadenaOchoBits)
+        return nuevaMascaraSinUltimosCerosCopia;
+    });
+
+    console.log('Lafe', matrizArrayCadenasBits)
+
+    const matrizArrayBitsMultiploOcho = matrizArrayCadenasBits.map((array) => array.join(''))
+
+    console.log('matrizArrayBitsMultiploOcho', matrizArrayBitsMultiploOcho);
+
+    return matrizArrayBitsMultiploOcho;
+}
+
+const formarMatrizArrayDireccionesIpDecimal = (matrizArrayBitsMultiploOcho) => {
+    //La funcion se llama así, pero no será para formar la Nueva Mascara Binario, solo estoy reutilizando la funcion
+    const matrizArrayDireccionsIpBinario = matrizArrayBitsMultiploOcho.map(arrayBitsMultiplo8 => formarNuevaMascaraBinario(arrayBitsMultiplo8));
+
+    console.log(matrizArrayDireccionsIpBinario);
+
+    const matrizArrayDireccionesIpDecimal = matrizArrayDireccionsIpBinario.map(arrayDireccionIpBinario => {
+        console.log(arrayDireccionIpBinario)
+        const arrayDireccionIpDecimal = arrayDireccionIpBinario.map(direccionIP => parseInt(direccionIP, 2));
+        return arrayDireccionIpDecimal;
+    });
+
+    return matrizArrayDireccionesIpDecimal;
+}
+
+export {hallarNumeroCeros, calcularCantidadHostsSubred, convertirBinarioMascaraSubred, hallarCantidadBits, formarCadena, eliminarValorMascara, agregarUnosCadenaCeros, agruparTodosBitsMacara, obtenerNuevaMascaraSubred, convertirDecimalNuevaMascara, formarNuevaMascaraBinario, hallarCantidadDiferente255, formarArraySubcadenasNdigitos, agregarCerosSubcadenasNdigitos, formarMatrizArrayBitsMultiploOcho, formarMatrizArrayDireccionesIpDecimal};
