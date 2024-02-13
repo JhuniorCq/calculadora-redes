@@ -70,7 +70,46 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
     //FORMAREMOS EL ÚLTIMO HOST -> arrayDireccionesIP = ['172.23.44.0', '172.34.32.45', ....]
     let arrayUltimoHost;
     if(datosRed.claseRed === 'A') {
-        
+
+        const dividendo = parseInt(hostsSubRedValor) + 2;
+        const maximo = dividendo/256 - 1;
+        let segundoOcteto = 0;
+
+        arrayUltimoHost = arrayDireccionesIP.map(direccionIP => {
+            const arrayOctetosDireccionIP = direccionIP.split('.'); // [['172','23','44','0'], [], ...]
+            const arraySinUltimosOctetos = [...arrayOctetosDireccionIP];
+            arraySinUltimosOctetos.pop();
+            arraySinUltimosOctetos.pop();
+            arraySinUltimosOctetos.pop();
+            console.log('arrayOctetosDireccionIP', arrayOctetosDireccionIP)
+            const tercerOcteto = parseInt(arrayOctetosDireccionIP[arrayOctetosDireccionIP.length-2]);
+            console.log(tercerOcteto)
+            if(tercerOcteto === 255) {
+                segundoOcteto++;
+            }
+            const valorAgregar = `${segundoOcteto}.${parseInt(arrayOctetosDireccionIP[arrayOctetosDireccionIP.length-2])+maximo}.254`;
+            arraySinUltimosOctetos.push(valorAgregar);
+            console.log(arraySinUltimosOctetos)
+            const ultimoHost = arraySinUltimosOctetos.join('.');
+            return ultimoHost;
+        }); 
+
+        // PARA LA CLASEEEEEEE 'A', CORREGIR LO DE ULTIMO HOST Y BROADCAST
+
+        // let iterador = 0;
+        // const fefe = arrayUltimoHost.map((ultimoHost, index) => {
+        //     const arrayOctetos = ultimoHost.split('.');
+        //     const arrayUltimoHostCopia = [...arrayOctetos];
+        //     if(arrayOctetos[2] === '255') {
+        //         iterador++;
+        //         arrayUltimoHostCopia[1] = String(iterador);
+        //     }
+        //     return arrayUltimoHostCopia;
+        // });
+
+        console.log('arrayUltimoHost CLASE A: ', arrayUltimoHost);
+        // console.log(fefe)
+
     } else if(datosRed.claseRed === 'B') {
         const dividendo = parseInt(hostsSubRedValor) + 2;
         const maximo = dividendo/256 - 1;
@@ -85,8 +124,8 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
             console.log('valorAgregar', valorAgregar);
             arraySinUltimosOctetos.push(valorAgregar);
             console.log(arraySinUltimosOctetos)
-            const arrayUltimoHost = arraySinUltimosOctetos.join('.');
-            return arrayUltimoHost;
+            const ultimoHost = arraySinUltimosOctetos.join('.');
+            return ultimoHost;
         });
 
         console.log(arrayUltimoHost);
@@ -102,8 +141,12 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
     }
 
     const arrayBroadcast = arrayUltimoHost.map(direccionIP => {
-        
+        let arrayOctetosDireccionIP = direccionIP.split('.');
+        arrayOctetosDireccionIP[arrayOctetosDireccionIP.length - 1] = parseInt(arrayOctetosDireccionIP[arrayOctetosDireccionIP.length - 1]) + 1;
+        return arrayOctetosDireccionIP.join('.')
     });
+
+    console.log('arrayBroadcast', arrayBroadcast)
 
     //ANTES DE INSERTAR FILAS AL <tbody> TENGO QUE LIMPIARLO
     cuerpoTabla.innerText = '';
@@ -118,7 +161,7 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
             <td>${mascaraSubredNueva}</td>
             <td>${arrayPrimerHost[index]}</td>
             <td>${arrayUltimoHost[index]}</td>
-            <td>Rellename</td>
+            <td>${arrayBroadcast[index]}</td>
         `;
         cuerpoTabla.append(nuevaFila);
     });

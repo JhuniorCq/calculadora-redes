@@ -1,5 +1,6 @@
 import {datosHallarVariasIP, direccionIpInput} from './calculadora-flsm.js';
 import {hallarCantidadDiferente255, formarArraySubcadenasNdigitos, agregarCerosSubcadenasNdigitos, formarMatrizArrayBitsMultiploOcho, formarMatrizArrayDireccionesIpDecimal} from './operaciones-flsm.js';
+import {datosRed} from './calculadora-flsm.js';
 
 const formarObjetoDatosHallarVariasIP = (valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal) => {
     datosHallarVariasIP.valorN = valorN;
@@ -10,8 +11,16 @@ const formarObjetoDatosHallarVariasIP = (valorN, numeroSubRedesValor, nuevaMasca
 const hallarVariasDireccionesIP = () => {
     const valorN = datosHallarVariasIP.valorN;
     const numeroSubRedesValor = datosHallarVariasIP.numeroSubRedesValor;
-    const nuevaMascaraSubredDecimal = datosHallarVariasIP.nuevaMascaraSubredDecimal;
+    let nuevaMascaraSubredDecimal = datosHallarVariasIP.nuevaMascaraSubredDecimal;
 
+    //////////////
+    if(datosRed.claseRed === 'A') { // LO DE LA CLASE A YA ESTÁ CORREGIDO, PERO HAY QUE VER SU ULTIMO HOST Y BROADCASTE QUE HAY ALGO MALO
+        const mascaraRedOficial = datosRed.mascaraSubred;
+        const arrayOctetos = mascaraRedOficial.split('.');
+        nuevaMascaraSubredDecimal = arrayOctetos.map(octeto => parseInt(octeto));
+    }
+
+    //PROBNADOOOOOOOOOOOOOOOOOOOOOOOOO
     const cantidadDiferente255 = hallarCantidadDiferente255(nuevaMascaraSubredDecimal); 
 
     const arraySubcadenasNdigitos = formarArraySubcadenasNdigitos(numeroSubRedesValor, valorN); // HASTA ACÁ FINO

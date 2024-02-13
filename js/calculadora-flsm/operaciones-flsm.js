@@ -101,9 +101,6 @@ const obtenerNuevaMascaraSubred = (valorN, mascaraSubredBinario) => {
 
     console.log(`Se eliminará los ${cantidadCeros} últimos ceros y se agregará esto: ${nuevoValor}`);
 
-    //ACÁ NO DEBO PASARLE LA MASCARA DE SUB RED EN BINARIO, debo pasarle la DIRECCIÓN IP INGRESADA
-    // const direccionIPValor = direccionIpInput.value; // ESTO AÚN NO VA ACÁ
-
     const todosBitsMascaraSubred = agruparTodosBitsMacara(mascaraSubredBinario, cantidadCeros, nuevoValor);
     
     console.log('Macara de Red, todos sus numeros binarios juntos: ', todosBitsMascaraSubred)
@@ -153,7 +150,7 @@ const hallarCantidadDiferente255 = (nuevaMascaraSubredDecimal) => {
             cantidadDiferente255++;
         }
     })
-
+    console.log(`CANTIDAD DIFERENTE DE 255 ES: ${cantidadDiferente255} Y NUEVAMASCARASUBREDDECIMAL ES: ${nuevaMascaraSubredDecimal}`)
     return cantidadDiferente255;
 }
 
@@ -175,9 +172,11 @@ const formarArraySubcadenasNdigitos = (numeroSubRedesValor, valorN) => {
     return arraySubcadenasNdigitos;
 }
 
-const agregarCerosSubcadenasNdigitos = (cantidadDiferente255, valorN, /*nuevaMascaraSubredDecimal,*/ arraySubcadenasNdigitos) => {
+const agregarCerosSubcadenasNdigitos = (cantidadDiferente255, valorN, arraySubcadenasNdigitos) => {
     const cadenaCeros = formarCadena(cantidadDiferente255*8 - valorN, '0');
 
+    //me está SALIENDO QUE CANTIDADDIFERENTE255 ES 2, LO CUAL N LO ES
+    console.log(`SE AGREGARAAAAAAA ${cantidadDiferente255*8 - valorN} CEROOOOOOOOS, CANTIDADDIFERENTE255 ES ${cantidadDiferente255}`)
     const arrayCadenaMultiploOchoBits = arraySubcadenasNdigitos.map(elemento => {
         const cadenaOchoBits = elemento.concat(cadenaCeros);
         console.log('aaaa', cadenaOchoBits) 

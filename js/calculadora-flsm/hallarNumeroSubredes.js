@@ -7,6 +7,7 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     console.log('Número de Subredes ingresado: ', numeroSubRedesValor);
 
     const mascaraSubred = datosRed.mascaraSubred;
+    console.log('LA MASCARA SUBRE QUE PASARE ES ESTA: ', mascaraSubred) // TODO BIEN CON 'mascaraSubred'
     const arrayNumerosMascara = mascaraSubred.split('.');
     const mascaraSubredBinario = convertirBinarioMascaraSubred(mascaraSubred);
     
