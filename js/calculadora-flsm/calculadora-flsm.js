@@ -44,6 +44,9 @@ const calcularDatos = (evento) => {
 
 
 const mostrarTablaResultados = (arrayDireccionesIP) => {
+
+    // contenedorResultado.style.display = 'none';
+
     const hostsSubRedValor = hostsSubRedInput.value;
     const mascaraSubredNuevaBinario = mascaraSubredNueva.split('.').map(elemento => {
         // parseInt(elemento);
@@ -64,15 +67,30 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
     //FORMAREMOS EL PRIMER HOST
     const arrayPrimerHost = formarArrayPrimerHost(arrayDireccionesIP, '1');
 
-    //FORMAREMOS EL ÚLTIMO HOST -> arrayDireccionesIP = [172.23.44.0, 172.34.32.45, ....]
+    //FORMAREMOS EL ÚLTIMO HOST -> arrayDireccionesIP = ['172.23.44.0', '172.34.32.45', ....]
     let arrayUltimoHost;
     if(datosRed.claseRed === 'A') {
         
     } else if(datosRed.claseRed === 'B') {
         const dividendo = parseInt(hostsSubRedValor) + 2;
-        const numero = dividendo/256;
-        const maximo = numero - 1;
+        const maximo = dividendo/256 - 1;
         console.log('MAXIMOOO', maximo); //AHORA ESTE NÚMERO LO TENGO QUE COLOCAR EN EL PENULTIMO DIGITO DE CADA DIRECCION IP
+
+        arrayUltimoHost = arrayDireccionesIP.map(direccionIP => {
+            const arrayOctetosDireccionIP = direccionIP.split('.');
+            const arraySinUltimosOctetos = [...arrayOctetosDireccionIP];
+            arraySinUltimosOctetos.pop();
+            arraySinUltimosOctetos.pop();
+            const valorAgregar = `${parseInt(arrayOctetosDireccionIP[arrayOctetosDireccionIP.length-2])+maximo}.254`;
+            console.log('valorAgregar', valorAgregar);
+            arraySinUltimosOctetos.push(valorAgregar);
+            console.log(arraySinUltimosOctetos)
+            const arrayUltimoHost = arraySinUltimosOctetos.join('.');
+            return arrayUltimoHost;
+        });
+
+        console.log(arrayUltimoHost);
+
     } else {
         arrayUltimoHost = arrayDireccionesIP.map(direccionIP => {
             const arrayDigitosDireccionIP = direccionIP.split('.');
@@ -83,7 +101,13 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
         console.log(arrayUltimoHost)
     }
 
-    // const arrayBroadcast 
+    const arrayBroadcast = arrayUltimoHost.map(direccionIP => {
+        
+    });
+
+    //ANTES DE INSERTAR FILAS AL <tbody> TENGO QUE LIMPIARLO
+    cuerpoTabla.innerText = '';
+
     //LE QUITARÉ EL arrayUltimoHost[index] POR AHORA
     arrayDireccionesIP.forEach((direccionIP, index) => {
         const nuevaFila = document.createElement('tr'); // Falta: Primer Host - Último Host - Broadcast
@@ -93,7 +117,7 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
             <td>${direccionIP} /${cantidadUnosNuevaMascara}</td>
             <td>${mascaraSubredNueva}</td>
             <td>${arrayPrimerHost[index]}</td>
-            <td>aaaa</td>
+            <td>${arrayUltimoHost[index]}</td>
             <td>Rellename</td>
         `;
         cuerpoTabla.append(nuevaFila);
