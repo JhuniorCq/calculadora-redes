@@ -50,29 +50,66 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
         return parseInt(elemento).toString(2);
     });
 
-    console.log('sfew: ', mascaraSubredNuevaBinario)
+    console.log('mascaraSubredNuevaBinario: ', mascaraSubredNuevaBinario)
 
-    const cantidadUnosNuevaMascara = mascaraSubredNuevaBinario.join('');
+    const cantidadUnosNuevaMascara = mascaraSubredNuevaBinario.join('').split('').filter(digito => digito === '1').length;
 
-    console.log(arrayDireccionesIP)
+    console.log('cantidadUnosNuevaMascara', cantidadUnosNuevaMascara)
+
+    console.log('arrayDireccionesIP', arrayDireccionesIP)
     contenedorRegresar.style.marginTop = '50px';
     contenedor.style.height = 'auto';
     contenedorResultado.style.display = 'flex';
 
+    //FORMAREMOS EL PRIMER HOST
+    const arrayPrimerHost = formarArrayPrimerHost(arrayDireccionesIP, '1');
+
+    //FORMAREMOS EL ÚLTIMO HOST -> arrayDireccionesIP = [172.23.44.0, 172.34.32.45, ....]
+    let arrayUltimoHost;
+    if(datosRed.claseRed === 'A') {
+        
+    } else if(datosRed.claseRed === 'B') {
+        const dividendo = parseInt(hostsSubRedValor) + 2;
+        const numero = dividendo/256;
+        const maximo = numero - 1;
+        console.log('MAXIMOOO', maximo); //AHORA ESTE NÚMERO LO TENGO QUE COLOCAR EN EL PENULTIMO DIGITO DE CADA DIRECCION IP
+    } else {
+        arrayUltimoHost = arrayDireccionesIP.map(direccionIP => {
+            const arrayDigitosDireccionIP = direccionIP.split('.');
+            arrayDigitosDireccionIP[arrayDigitosDireccionIP.length - 1] = parseInt(arrayDigitosDireccionIP[arrayDigitosDireccionIP.length - 1]) + parseInt(hostsSubRedValor);
+            console.log(arrayDigitosDireccionIP)
+            return arrayDigitosDireccionIP.join('.');
+        });
+        console.log(arrayUltimoHost)
+    }
+
+    // const arrayBroadcast 
+    //LE QUITARÉ EL arrayUltimoHost[index] POR AHORA
     arrayDireccionesIP.forEach((direccionIP, index) => {
-        const nuevaFila = document.createElement('tr');
+        const nuevaFila = document.createElement('tr'); // Falta: Primer Host - Último Host - Broadcast
         nuevaFila.innerHTML = `
             <td>Subred ${index+1}</td>
             <td>${hostsSubRedValor}</td>
-            <td>${direccionIP} /</td>
+            <td>${direccionIP} /${cantidadUnosNuevaMascara}</td>
             <td>${mascaraSubredNueva}</td>
-            <td>Rellename</td>
-            <td>Rellename</td>
+            <td>${arrayPrimerHost[index]}</td>
+            <td>aaaa</td>
             <td>Rellename</td>
         `;
         cuerpoTabla.append(nuevaFila);
     });
 
+}
+
+const formarArrayPrimerHost = (arrayDireccionesIP, valorColocar) => {
+    const arrayPrimerHost = arrayDireccionesIP.map(direccionIP => {
+        const arrayDigitosDireccionIP = direccionIP.split('');
+        arrayDigitosDireccionIP[arrayDigitosDireccionIP.length - 1] = valorColocar;
+        return arrayDigitosDireccionIP.join('');
+    })
+
+    console.log('arrayPrimerHost', arrayPrimerHost)
+    return arrayPrimerHost;
 }
 
 //Con esto mostraremos el Prefijo de Red, pero de manera dinámica
