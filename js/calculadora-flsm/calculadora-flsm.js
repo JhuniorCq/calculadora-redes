@@ -1,9 +1,8 @@
 import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js';
 import {cambiarMarginLabel} from './detalles-flsm.js';
 import {hallarPrefijoRed} from './hallarPrefijoRed.js';
-import {hallarNumeroCeros, calcularCantidadHostsSubred, convertirBinarioMascaraSubred, hallarCantidadBits, formarCadena, eliminarValorMascara, formarNuevaMascaraBinario, obtenerNuevaMascaraSubred, hallarCantidadDiferente255, formarArraySubcadenasNdigitos, agregarCerosSubcadenasNdigitos, formarMatrizArrayBitsMultiploOcho, formarMatrizArrayDireccionesIpDecimal} from './operaciones-flsm.js';
-import {formarObjetoDatosHallarVariasIP, hallarVariasDireccionesIP} from './hallarConjuntoDireccionesIp.js';
-import {hallarNumeroSubredes} from './hallarNumeroSubredes.js';
+import {hallarVariasDireccionesIP} from './hallarConjuntoDireccionesIp.js';
+import {hallarNumeroSubredes, mascaraSubredNueva} from './hallarNumeroSubredes.js';
 const formulario = document.querySelector('.formulario');
 const direccionIpInput = document.getElementById('direccion-ip');
 const prefijoRedInput= document.getElementById('prefijo-red'); // Acá mostraré un dato
@@ -11,6 +10,13 @@ const numeroSubRedesInput = document.getElementById('numero-subredes');
 const hostsSubRedInput = document.getElementById('hosts-subred'); // Acá mostraré un dato
 const datosRed = {};
 const datosHallarVariasIP = {} //DE AHÍ DEBO ASIGNARLE OTRO NOMBRE
+
+const contenedor = document.querySelector('.contenedor');
+const contenedorRegresar = document.querySelector('.contenedor-regresar');
+const contenedorResultado = document.querySelector('.resultado');
+const tabla = document.querySelector('.tabla');
+const cuerpoTabla = document.querySelector('.cuerpo-tabla');
+
 
 //IP DE EJEMPLO: 192.168.200.139
 const calcularDatos = (evento) => {
@@ -31,7 +37,41 @@ const calcularDatos = (evento) => {
     //PROCESO PARA HALLAR LOS HOSTS POR SUBRED
     hallarNumeroSubredes(numeroSubRedesValor);
     
-    const matrizArrayDireccionesIP = hallarVariasDireccionesIP();
+    const arrayDireccionesIP = hallarVariasDireccionesIP(); // LISTA DE DIRECCIONES IP
+
+    mostrarTablaResultados(arrayDireccionesIP);
+}
+
+
+const mostrarTablaResultados = (arrayDireccionesIP) => {
+    const hostsSubRedValor = hostsSubRedInput.value;
+    const mascaraSubredNuevaBinario = mascaraSubredNueva.split('.').map(elemento => {
+        // parseInt(elemento);
+        return parseInt(elemento).toString(2);
+    });
+
+    console.log('sfew: ', mascaraSubredNuevaBinario)
+
+    const cantidadUnosNuevaMascara = mascaraSubredNuevaBinario.join('');
+
+    console.log(arrayDireccionesIP)
+    contenedorRegresar.style.marginTop = '50px';
+    contenedor.style.height = 'auto';
+    contenedorResultado.style.display = 'flex';
+
+    arrayDireccionesIP.forEach((direccionIP, index) => {
+        const nuevaFila = document.createElement('tr');
+        nuevaFila.innerHTML = `
+            <td>Subred ${index+1}</td>
+            <td>${hostsSubRedValor}</td>
+            <td>${direccionIP} /</td>
+            <td>${mascaraSubredNueva}</td>
+            <td>Rellename</td>
+            <td>Rellename</td>
+            <td>Rellename</td>
+        `;
+        cuerpoTabla.append(nuevaFila);
+    });
 
 }
 

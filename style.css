@@ -6,6 +6,16 @@
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
 }
+/* body {
+    display: flex;
+    flex-direction: column;
+    
+} */
+.header {
+    width: 100%;
+    margin: 30px 0;
+    /* background-color: red; */
+}
 
 .contenedor {
     width: 100%;
@@ -14,4 +24,5 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }

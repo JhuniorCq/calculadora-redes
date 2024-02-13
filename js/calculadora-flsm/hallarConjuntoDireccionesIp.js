@@ -28,25 +28,12 @@ const hallarVariasDireccionesIP = () => {
     console.log(matrizArrayPseudoDireccionesIpDecimal);
     console.log(direccionIpInput.value)
 
-    // HASTA ACÁ TAMOS BIEN, YA ME BOTA UNA MATRIZ CON ARRAYS QUE CONTIENEN LOS OCTETOS DE CADA IP
-
-    //LO QUE QUEDARÍA POR HACER ES ORDENAR TODO ESTO EN FUNCIONES Y MOSTRARLO EN EL FRONT
-    //SI SE PUEDE SERÍA MEJOR CREAR ARCHIVOS SEPARADOS PARA LAS FUNCIONES Y LUEGO SOLO LLAMARLAS ACÁ
-
     const cantidadIgual255 = 4 - cantidadDiferente255;
     const direccionIpInputValor = direccionIpInput.value;
     let arrayNumerosDireccionIpValor = direccionIpInputValor.split('.');
     arrayNumerosDireccionIpValor = arrayNumerosDireccionIpValor.map(octeto => parseInt(octeto));
 
     const matrizArrayDireccionesIP = matrizArrayPseudoDireccionesIpDecimal.map(array => [...array]);
-
-    // for(let i=0; i<matrizArrayPseudoDireccionesIP.length; i++) {
-    //     for(let j=0; j<4; j++) {
-    //         if(j < cantidadIgual255) {
-    //             matrizArrayPseudoDireccionesIP[i][j] = arrayNumerosDireccionIpValor[j];
-    //         }
-    //     }
-    // }
 
     matrizArrayDireccionesIP.forEach((pseudoDireccion, i) => {
         pseudoDireccion.forEach((numero, j) => {
@@ -57,6 +44,12 @@ const hallarVariasDireccionesIP = () => {
     });
 
     console.log(matrizArrayDireccionesIP); // LISTA DE DIRECCIONES IP
+
+    const arrayDireccionesIP = matrizArrayDireccionesIP.map(array => array.join('.'));
+
+    console.log(arrayDireccionesIP);
+
+    return arrayDireccionesIP;
 }
 
 

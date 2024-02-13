@@ -40,8 +40,6 @@
                         <div class="contenedor-campo">
                             <label for="prefijo-red" class="etiqueta">Prefijo de Red: </label>
                             <input type="number" id="prefijo-red" name="prefijo-red" class="input">
-                            <!-- <p class="parrafo" class="etiqueta">Prefijo de Red:</p>
-                            <p id="prefijo-red" class="resultado"></p> -->
                         </div>
                     </div>
                     <div class="fila">
@@ -52,8 +50,6 @@
                         <div class="contenedor-campo">
                             <label for="hosts-subred" class="etiqueta">Hosts por Subred: </label>
                             <input type="number" id="hosts-subred" name="hosts-subred" class="input">
-                            <!-- <p class="parrafo" class="etiqueta">Hosts por Subred: </p>
-                            <p id="hosts-subred" class="resultado"></p> -->
                         </div>
                     </div>
                     <div class="contenedor-boton">
@@ -63,11 +59,26 @@
 
                 <div class="resultado">
                     <!-- TABLA CON LOS RESULTADOS -->
+                    <table class="tabla">
+                        <thead>
+                            <tr>
+                                <th>Subred</th>
+                                <th>N° de Hosts</th>
+                                <th>IP de Red</th>
+                                <th>Máscara</th>
+                                <th>Primer host</th>
+                                <th>Último host</th>
+                                <th>Broadcast</th>
+                            </tr>
+                        </thead>
+                        <tbody class="cuerpo-tabla">
+                            <!-- 'X' cantidad de Filas -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
 
         <script src="js/calculadora-flsm/calculadora-flsm.js" type="module"></script>
-        <!-- <script src="js/validaciones-flsm.js" type="module"></script> -->
     </body>
 </html>

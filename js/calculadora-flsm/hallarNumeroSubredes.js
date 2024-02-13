@@ -1,6 +1,7 @@
 import {datosRed, hostsSubRedInput, direccionIpInput} from './calculadora-flsm.js';
 import {convertirBinarioMascaraSubred, hallarCantidadBits, obtenerNuevaMascaraSubred, hallarNumeroCeros, calcularCantidadHostsSubred} from './operaciones-flsm.js';
 import {formarObjetoDatosHallarVariasIP} from './hallarConjuntoDireccionesIp.js';
+let mascaraSubredNueva;
 
 const hallarNumeroSubredes = (numeroSubRedesValor) => {
     console.log('Número de Subredes ingresado: ', numeroSubRedesValor);
@@ -18,6 +19,7 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     // Esta función me devuelve la NUEVA MÁSCADA DE SUBRED (EN DECIMAL) -> ESTO ES UN CAMPO QUE MOSTRARÉ EN LA TABLA (será igual en cada fila)
     const nuevaMascaraSubredDecimal = obtenerNuevaMascaraSubred(valorN, mascaraSubredBinario);
     console.log(nuevaMascaraSubredDecimal);
+    mascaraSubredNueva = nuevaMascaraSubredDecimal.join('.');
 
     // AHORA DEBEMOS SEGUIR PARA HALLAR EL NÚMERO DE SUBREDES
     const cantidadCeros = hallarNumeroCeros(valorN);
@@ -32,4 +34,4 @@ const hallarNumeroSubredes = (numeroSubRedesValor) => {
     formarObjetoDatosHallarVariasIP(valorN, numeroSubRedesValor, nuevaMascaraSubredDecimal);
 }
 
-export {hallarNumeroSubredes};
+export {hallarNumeroSubredes, mascaraSubredNueva};
