@@ -74,41 +74,21 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
         const dividendo = parseInt(hostsSubRedValor) + 2;
         const maximo = dividendo/256 - 1;
         let segundoOcteto = 0;
-
+        let iterador = 0;
         arrayUltimoHost = arrayDireccionesIP.map(direccionIP => {
-            const arrayOctetosDireccionIP = direccionIP.split('.'); // [['172','23','44','0'], [], ...]
-            const arraySinUltimosOctetos = [...arrayOctetosDireccionIP];
-            arraySinUltimosOctetos.pop();
-            arraySinUltimosOctetos.pop();
-            arraySinUltimosOctetos.pop();
-            console.log('arrayOctetosDireccionIP', arrayOctetosDireccionIP)
-            const tercerOcteto = parseInt(arrayOctetosDireccionIP[arrayOctetosDireccionIP.length-2]);
-            console.log(tercerOcteto)
-            if(tercerOcteto === 255) {
-                segundoOcteto++;
-            }
-            const valorAgregar = `${segundoOcteto}.${parseInt(arrayOctetosDireccionIP[arrayOctetosDireccionIP.length-2])+maximo}.254`;
-            arraySinUltimosOctetos.push(valorAgregar);
-            console.log(arraySinUltimosOctetos)
-            const ultimoHost = arraySinUltimosOctetos.join('.');
-            return ultimoHost;
+            
+            const dividendo = parseInt(hostsSubRedValor) + 2;
+            const maximo = dividendo/256 - 1;
+            let arrayOctetosDireccionIP = direccionIP.split('.'); // [['172','23','44','0'], [], ...]
+            arrayOctetosDireccionIP = arrayOctetosDireccionIP.map(direccionIP => parseInt(direccionIP));
+
+            const digitoSumado = arrayOctetosDireccionIP[2] + 127;
+            arrayOctetosDireccionIP[2] = digitoSumado;
+            arrayOctetosDireccionIP[3] = 254; //ESTE SIEMPRE SERÁ 254
+
+            return arrayOctetosDireccionIP.join('.')
         }); 
-
-        // PARA LA CLASEEEEEEE 'A', CORREGIR LO DE ULTIMO HOST Y BROADCAST
-
-        // let iterador = 0;
-        // const fefe = arrayUltimoHost.map((ultimoHost, index) => {
-        //     const arrayOctetos = ultimoHost.split('.');
-        //     const arrayUltimoHostCopia = [...arrayOctetos];
-        //     if(arrayOctetos[2] === '255') {
-        //         iterador++;
-        //         arrayUltimoHostCopia[1] = String(iterador);
-        //     }
-        //     return arrayUltimoHostCopia;
-        // });
-
-        console.log('arrayUltimoHost CLASE A: ', arrayUltimoHost);
-        // console.log(fefe)
+        console.log('arrayUltimoHost: ', arrayUltimoHost)
 
     } else if(datosRed.claseRed === 'B') {
         const dividendo = parseInt(hostsSubRedValor) + 2;
@@ -137,7 +117,7 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
             console.log(arrayDigitosDireccionIP)
             return arrayDigitosDireccionIP.join('.');
         });
-        console.log(arrayUltimoHost)
+        console.log('arrayUltimoHost CLASE C', arrayUltimoHost)
     }
 
     const arrayBroadcast = arrayUltimoHost.map(direccionIP => {
@@ -170,9 +150,10 @@ const mostrarTablaResultados = (arrayDireccionesIP) => {
 
 const formarArrayPrimerHost = (arrayDireccionesIP, valorColocar) => {
     const arrayPrimerHost = arrayDireccionesIP.map(direccionIP => {
-        const arrayDigitosDireccionIP = direccionIP.split('');
-        arrayDigitosDireccionIP[arrayDigitosDireccionIP.length - 1] = valorColocar;
-        return arrayDigitosDireccionIP.join('');
+        const arrayDigitosDireccionIP = direccionIP.split('.');
+        arrayDigitosDireccionIP[arrayDigitosDireccionIP.length - 1] = parseInt(arrayDigitosDireccionIP[arrayDigitosDireccionIP.length - 1]) + 1;
+        console.log('lefefege: ', arrayDigitosDireccionIP)
+        return arrayDigitosDireccionIP.join('.');
     })
 
     console.log('arrayPrimerHost', arrayPrimerHost)
