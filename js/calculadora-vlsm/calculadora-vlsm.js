@@ -54,11 +54,16 @@ const hallarResultado = (evento) => {
             const cantidadUnos = nuevoPrefijoRed;
             const cadena32Bits = formarCadena32Bits(cantidadUnos);
             console.log(cadena32Bits);
-            const nuevaMascaraSubred = hallarNuevaMascaraSubred(cadena32Bits);
+            const arrayOctetosNuevaMascara = hallarNuevaMascaraSubred(cadena32Bits);
+            const nuevaMascaraSubred = arrayOctetosNuevaMascara.join('.');
             console.log(nuevaMascaraSubred);
 
             //Calcular el salto de red
-            
+            const saltoRed = 256 - arrayOctetosNuevaMascara[3];
+
+            //Calcular los parámetros de la red
+            const a = calcularParametrosRed(direccionIpValor);
+            console.log('La Dirección IP inicial es: ', direccionIpValor)
 
         });
 
@@ -105,7 +110,21 @@ const hallarNuevaMascaraSubred = (cadena32Bits) => {
         array.push(parseInt(segmentoCadena, 2));
     }
     
-    return array.join('.');
+    return array;
+}
+
+const calcularParametrosRed = (direccionIpValor) => {
+    const claseRed = datosSubred.claseRed;
+    const octetosDireccionIP = direccionIpValor.split('.'); // ['192', '168', '200', '139']
+    console.log(octetosDireccionIP);
+
+    if(claseRed === 'A') {
+        
+    } else if(claseRed === 'B') {
+
+    } else {
+        
+    }
 }
 
 /***************************************/
