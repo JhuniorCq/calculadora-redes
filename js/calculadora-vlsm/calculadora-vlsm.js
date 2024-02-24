@@ -5,9 +5,10 @@ const numeroSubRedesInput = document.getElementById('numero-subredes');
 import {hallarPrefijoRed} from '../calculadora-vlsm/hallarPrefijoRed.js';
 import {cambiarMarginLabel} from '../detalles-calculadoras.js';
 
-const resultado = document.querySelector('.resultado');
+const contenedorTablaSubredes = document.querySelector('.contenedor-subredes');
 const cuerpoTabla = document.querySelector('.cuerpo-tabla');
 
+//Acá almaceno -> Clase Subred, Prefijo Subred, Máscara Subred
 const datosSubred = {};
 
 const hallarResultado = (evento) => {
@@ -15,18 +16,56 @@ const hallarResultado = (evento) => {
         evento.preventDefault();
 
         const direccionIpValor = direccionIpInput.value;
-        // const 
+        
+        
+        //Cada INPUT FILA es un Número de Host nodeListInputFila
+        const nodeListInputFila = document.querySelectorAll('.input-fila');
+        const arrayInputFila = [...nodeListInputFila];
+        
+        if(nodeListInputFila.length <= 0) {
+            alert('El número de subredes debe ser positivo.');
+            return;
+        }
 
-        // hallarPrefijoRed(direccionIpValor);
+        //Ordenamos los valores del array
+        let arrayInputsValores = arrayInputFila.map(inputFila => inputFila.value);
+        arrayInputsValores.sort((a, b) => b - a);
+
+        console.log(arrayInputsValores);
+
+        arrayInputsValores.forEach(valor => {
+            //Calcular el número de bits de host necesarios
+            const valorN = hallarValorNyHostsDisponibles(valor)[0];
+            const hostsDisponibles = hallarValorNyHostsDisponibles(valor)[1];
+            console.log(`Para ${valor} su N es: `, valorN);
+            console.log(`Para ${valor} su cantidad de Hosts disponibles: `, hostsDisponibles);
+
+            
+        });
 
     } catch(err) {
         console.error('', err.message);
     }
 }
 
+const hallarValorNyHostsDisponibles = (valor) => {
+    let i=0, valorN, hostsDisponibles;
+
+    while(true) {
+        i++;
+        if(2**i - 2 >= valor) {
+            hostsDisponibles = 2**i - 2;
+            break;
+        }
+    }
+    valorN = i;
+
+    return [valorN, hostsDisponibles];
+}
+
 const mostrarPrefijoRedDinamico = () => {
     const direccionIpValor = direccionIpInput.value;
-    console.log(direccionIpValor);
+    // console.log(direccionIpValor);
     
     hallarPrefijoRed(direccionIpValor);
     cambiarMarginLabel(direccionIpInput, prefijoRedInput);
@@ -50,7 +89,7 @@ const mostrarNumeroSubredesDinamico = () => {
         cuerpoTabla.append(nuevaFila);
     }
     
-    resultado.style.display = 'flex';
+    contenedorTablaSubredes.style.display = 'flex';
 }
 
 

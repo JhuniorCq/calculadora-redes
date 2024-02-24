@@ -115,7 +115,7 @@
     scale: 1.1;
 }
 
-.resultado {
+.contenedor-subredes {
     /* display: flex; */
     display: none;
     width: 100%;
@@ -149,7 +149,6 @@ th {
     background-color: #1b5e20;
     color: white;
     font-weight: normal;
-    
 }
 
 td {
@@ -179,4 +178,13 @@ td {
 
 .input-fila:focus {
     border-bottom: 2px solid rgb(45, 145, 45);
+}
+
+.contenedor-resultado {
+    /* display: none; */
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    max-height: 600px;
+    overflow: auto;
 }
