@@ -40,7 +40,26 @@ const hallarResultado = (evento) => {
             console.log(`Para ${valor} su N es: `, valorN);
             console.log(`Para ${valor} su cantidad de Hosts disponibles: `, hostsDisponibles);
 
+            //Calcular el número de bits de subred
+            const prefijoRed = datosSubred.prefijoRed;
+            const numeroBitsSubred = (32 - prefijoRed) - valorN;
+
+            //Calcular la nueva máscara de subred
+            const nuevoPrefijoRed = prefijoRed + numeroBitsSubred;
+
+            console.log(numeroBitsSubred)
+            console.log(nuevoPrefijoRed)
+
+            //Hallar la nueva Máscara de subred
+            const cantidadUnos = nuevoPrefijoRed;
+            const cadena32Bits = formarCadena32Bits(cantidadUnos);
+            console.log(cadena32Bits);
+            const nuevaMascaraSubred = hallarNuevaMascaraSubred(cadena32Bits);
+            console.log(nuevaMascaraSubred);
+
+            //Calcular el salto de red
             
+
         });
 
     } catch(err) {
@@ -63,6 +82,33 @@ const hallarValorNyHostsDisponibles = (valor) => {
     return [valorN, hostsDisponibles];
 }
 
+const formarCadena32Bits = (cantidadUnos) => {
+    let cadena32Bits = '';
+    for(let i=0; i<32; i++) {
+        if(i < cantidadUnos) {
+            cadena32Bits += '1';
+        } else {
+            cadena32Bits += '0';
+        }
+    }
+    return cadena32Bits;
+}
+
+const hallarNuevaMascaraSubred = (cadena32Bits) => {
+    let rangoInicio = 0, rangoFin = 8;
+    let array = [];
+
+    for(let i=0; i<4; i++) {
+        const segmentoCadena = cadena32Bits.slice(rangoInicio, rangoFin);
+        rangoInicio = rangoFin;
+        rangoFin = rangoFin + 8;
+        array.push(parseInt(segmentoCadena, 2));
+    }
+    
+    return array.join('.');
+}
+
+/***************************************/
 const mostrarPrefijoRedDinamico = () => {
     const direccionIpValor = direccionIpInput.value;
     // console.log(direccionIpValor);
