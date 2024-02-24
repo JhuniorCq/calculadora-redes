@@ -1,5 +1,5 @@
 import {validarDireccionIP, validarNumeroSubRedes} from './validaciones-flsm.js';
-import {cambiarMarginLabel} from './detalles-flsm.js';
+import {cambiarMarginLabel} from '../detalles-calculadoras.js';
 import {hallarPrefijoRed} from './hallarPrefijoRed.js';
 import {hallarVariasDireccionesIP} from './hallarConjuntoDireccionesIp.js';
 import {hallarNumeroSubredes, mascaraSubredNueva} from './hallarNumeroSubredes.js';
@@ -167,7 +167,7 @@ const mostrarPrefijoRedDinamico = () => {
 
     hallarPrefijoRed(direccionIpValor);
 
-    prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
+    // prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
 
     cambiarMarginLabel(direccionIpInput, prefijoRedInput);
 }

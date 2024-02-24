@@ -1,5 +1,5 @@
+
 .contenedor-regresar {
-    /* margin-top: 50px; */
     width: 100%;
     margin-bottom: 50px;
 }
@@ -24,7 +24,6 @@
 
 .contenedor-titulo {
     width: 100%;
-    /* border: 1px solid green; */
     margin-bottom: 2.5rem;
 }
 
@@ -34,11 +33,9 @@
 
 .contenedor-parrafo {
     width: 100%;
-    /* border: 1px solid yellow; */
 }
 
 .formulario {
-    /* border: 1px solid red; */
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -51,14 +48,12 @@
 
 .contenedor-inputs {
     width: 80%;
-    /* border: 1px solid red; */
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 20px;
 }
 
 .contenedor-input {
-    /* border: 1px solid brown; */
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -67,14 +62,10 @@
 }
 
 .etiqueta {
-    margin-bottom: -20px; /*10px*/
+    margin-bottom: -20px;
     font-weight: bold;
     color: #11897d;
 }
-
-
-
-
 
 .contenedor-inputs {
     display: flex;
@@ -84,14 +75,6 @@
     display: flex;
     flex-direction: column;
 }
-
-
-
-
-
-
-
-
 
 .input {
     outline: none;
@@ -108,11 +91,8 @@
     font-weight: bold;
 }
 
-
-
-
 .contenedor-boton {
-    margin-top: 20px;
+    margin: 30px 0 20px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -121,7 +101,6 @@
 .boton-calcular {
     color: white;
     font-size: 1rem;
-    /* font-weight: bold; */
     cursor: pointer;
     background-color: #26a69a;
     padding: 10px 20px;
@@ -134,4 +113,70 @@
 .boton-calcular:hover {
     background-color: #26d0bf;
     scale: 1.1;
+}
+
+.resultado {
+    /* display: flex; */
+    display: none;
+    width: 100%;
+    margin-top: 30px;
+    /* padding: 50px 0; */
+    background-color: #e0f2f1;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-tabla {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid white;
+}
+
+td, th {
+    border: 1px solid white;
+    padding: 15px;
+}
+
+th {
+    background-color: #1b5e20;
+    color: white;
+    font-weight: normal;
+    
+}
+
+td {
+    background-color: #455a64;
+    color: #cccccc;
+    font-family: "Courier New", sans-serif;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.input-fila {
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-bottom: 1px solid white;
+    padding: 8px 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.input-fila::placeholder {
+    color: white;
+    font-size: 15px;
+}
+
+.input-fila:focus {
+    border-bottom: 2px solid rgb(45, 145, 45);
 }
