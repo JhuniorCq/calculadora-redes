@@ -32,7 +32,8 @@ const hallarResultado = (evento) => {
         arrayInputsValores.sort((a, b) => b - a);
 
         console.log(arrayInputsValores);
-
+        let booleano = true;
+        let ultimoOctetoSiguienteSubred;
         arrayInputsValores.forEach(valor => {
             //Calcular el número de bits de host necesarios
             const valorN = hallarValorNyHostsDisponibles(valor)[0];
@@ -61,10 +62,21 @@ const hallarResultado = (evento) => {
             //Calcular el salto de red
             const saltoRed = 256 - arrayOctetosNuevaMascara[3];
 
+            console.log('La Dirección IP inicial es: ', direccionIpValor);
             //Calcular los parámetros de la red
-            const a = calcularParametrosRed(direccionIpValor);
-            console.log('La Dirección IP inicial es: ', direccionIpValor)
+            
+            if(booleano) {
+                ultimoOctetoSiguienteSubred = calcularParametrosRed(direccionIpValor, hostsDisponibles)[4][3];
+                booleano = false;
+            }
 
+            console.log('ultimoOcteto', ultimoOctetoSiguienteSubred)
+            // const arrayParametros = calcularParametrosRed(direccionIpInput, hostsDisponibles, saltoRed, ultimoOctetoSiguienteSubred);
+            // const direccionSubred = arrayParametros[0];
+            // const primerHost = arrayParametros[1];
+            // const ultimoHost = arrayParametros[2];
+            // const broadcast = arrayParametros[3];
+            // ultimoOctetoSiguienteSubred = arrayParametros[4][3];
         });
 
     } catch(err) {
@@ -113,7 +125,7 @@ const hallarNuevaMascaraSubred = (cadena32Bits) => {
     return array;
 }
 
-const calcularParametrosRed = (direccionIpValor) => {
+const calcularParametrosRed = (direccionIpValor, hostsDisponibles, saltoRed=0, octeto=0) => {
     const claseRed = datosSubred.claseRed;
     const octetosDireccionIP = direccionIpValor.split('.'); // ['192', '168', '200', '139']
     console.log(octetosDireccionIP);
@@ -123,7 +135,37 @@ const calcularParametrosRed = (direccionIpValor) => {
     } else if(claseRed === 'B') {
 
     } else {
-        
+        octetosDireccionIP.pop();
+        const direccionSubred = octetosDireccionIP.concat([saltoRed+octeto]); // ['192', '168', '200', 0]
+        const direccionSubredOK = [...direccionSubred];
+        console.log('direccionSubred', direccionSubredOK);
+
+        const ultimoOcteto = direccionSubred.pop();
+        const primerHost = octetosDireccionIP.concat([ultimoOcteto + 1]);
+        const primerHostOK = [...primerHost];
+        console.log('primerHost', primerHostOK);
+
+        // const ultimoOcteto2 = primerHost.pop();
+        const ultimoHost = octetosDireccionIP.concat([ultimoOcteto + hostsDisponibles]);
+        const ultimoHostOK = [...ultimoHost];
+        console.log('ultimoHost', ultimoHostOK);
+
+        const ultimoOcteto2 = ultimoHost.pop();
+        const broadcast = ultimoHost.concat([ultimoOcteto2 + 1]);
+        const broadcastOK = [...broadcast];
+        console.log('broadcast', broadcastOK);
+
+        const ultimoOcteto3 = broadcast.pop();
+        const siguienteSubred = broadcast.concat([ultimoOcteto3 + 1]);
+        console.log('siguienteSubred', siguienteSubred);
+
+        return [
+            direccionSubredOK,
+            primerHostOK,
+            ultimoHostOK,
+            broadcastOK,
+            siguienteSubred
+        ];
     }
 }
 
