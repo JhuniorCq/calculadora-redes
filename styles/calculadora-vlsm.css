@@ -181,9 +181,9 @@ td {
 }
 
 .contenedor-resultado {
-    /* display: none; */
-    width: 70%;
-    display: flex;
+    display: none;
+    min-width: 70%;
+    /* display: flex; */
     justify-content: center;
     max-height: 600px;
     overflow: auto;

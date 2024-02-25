@@ -8,6 +8,9 @@ import {cambiarMarginLabel} from '../detalles-calculadoras.js';
 const contenedorTablaSubredes = document.querySelector('.contenedor-subredes');
 const cuerpoTabla = document.querySelector('.cuerpo-tabla');
 
+const contenedorResultado = document.querySelector('.contenedor-resultado');
+const tbodyResultados = document.querySelector('.tbody-resultados');
+
 //Acá almaceno -> Clase Subred, Prefijo Subred, Máscara Subred
 const datosSubred = {};
 
@@ -32,9 +35,25 @@ const hallarResultado = (evento) => {
         arrayInputsValores.sort((a, b) => b - a);
 
         console.log(arrayInputsValores);
-        let booleano = true;
-        let ultimoOctetoSiguienteSubred;
-        arrayInputsValores.forEach(valor => {
+
+        //Formando la PRIMERA DIRECCIÓN DE RED
+        const direccionIpTresOctetos = direccionIpValor.split('.');
+        direccionIpTresOctetos.pop();
+        direccionIpTresOctetos.push(0);
+        // const primeraDireccionRed = direccionIpTresOctetos;
+        // const primeraDireccionRedOK = [...primeraDireccionRed];
+
+
+
+        console.log('SFEGEGWEGWEG', direccionIpTresOctetos)
+
+        let booleano = true, ultimoOctetoSiguienteSubred;
+
+        const arrayDatosNecesarios = [];
+
+        let index = 0;
+        for(const valor of arrayInputsValores) {
+
             //Calcular el número de bits de host necesarios
             const valorN = hallarValorNyHostsDisponibles(valor)[0];
             const hostsDisponibles = hallarValorNyHostsDisponibles(valor)[1];
@@ -61,23 +80,54 @@ const hallarResultado = (evento) => {
 
             //Calcular el salto de red
             const saltoRed = 256 - arrayOctetosNuevaMascara[3];
+            console.log('saltoRed', saltoRed)
 
             console.log('La Dirección IP inicial es: ', direccionIpValor);
+
+            //Calcular los parámetros de la red -> Almacenaré algunos de los datos halladas paracada Fila, en este Objeto
+            const objetoDatosFila = {};
+            objetoDatosFila['numero_subred'] = index + 1;
+
+
+            index++;
+            /*-------------------------------------------------------- */
             //Calcular los parámetros de la red
             
-            if(booleano) {
-                ultimoOctetoSiguienteSubred = calcularParametrosRed(direccionIpValor, hostsDisponibles)[4][3];
-                booleano = false;
-            }
+            // if(booleano) {
+            //     const arrayResultados = calcularParametrosRed(direccionIpValor, hostsDisponibles);
+            //     ultimoOctetoSiguienteSubred = arrayResultados[4];
+            //     booleano = false;
+            // }
 
-            console.log('ultimoOcteto', ultimoOctetoSiguienteSubred)
-            // const arrayParametros = calcularParametrosRed(direccionIpInput, hostsDisponibles, saltoRed, ultimoOctetoSiguienteSubred);
+            // console.log('ultimoOcteto', ultimoOctetoSiguienteSubred)
+            // const arrayParametros = calcularParametrosRed(direccionIpValor, hostsDisponibles, saltoRed, ultimoOctetoSiguienteSubred);
+
+            // // crearFilaResultado(arrayParametros, index, hostsDisponibles, nuevaMascaraSubred);
+            
             // const direccionSubred = arrayParametros[0];
             // const primerHost = arrayParametros[1];
             // const ultimoHost = arrayParametros[2];
             // const broadcast = arrayParametros[3];
-            // ultimoOctetoSiguienteSubred = arrayParametros[4][3];
-        });
+            
+            // //Ahora tocará crear las filas
+            // const nuevaFila = document.createElement('tr');
+            // nuevaFila.innerHTML = `
+            //     <td>Subred ${index+1}</td>
+            //     <td>${hostsDisponibles}</td>
+            //     <td>${direccionSubred}</td>
+            //     <td>${nuevaMascaraSubred}</td>
+            //     <td>${primerHost}</td>
+            //     <td>${ultimoHost}</td>
+            //     <td>${broadcast}</td>
+            // `;
+            // tbodyResultados.append(nuevaFila);
+
+            
+            // ultimoOctetoSiguienteSubred = arrayParametros[4];
+            
+            // contenedorResultado.style.display = 'flex';
+            // index++;
+        }
 
     } catch(err) {
         console.error('', err.message);
@@ -138,7 +188,9 @@ const calcularParametrosRed = (direccionIpValor, hostsDisponibles, saltoRed=0, o
         octetosDireccionIP.pop();
         const direccionSubred = octetosDireccionIP.concat([saltoRed+octeto]); // ['192', '168', '200', 0]
         const direccionSubredOK = [...direccionSubred];
+        const ultimoOctetoSubredActual = direccionSubredOK[3];
         console.log('direccionSubred', direccionSubredOK);
+        console.log('ultimoOctetoSubredActual', ultimoOctetoSubredActual);
 
         const ultimoOcteto = direccionSubred.pop();
         const primerHost = octetosDireccionIP.concat([ultimoOcteto + 1]);
@@ -164,9 +216,29 @@ const calcularParametrosRed = (direccionIpValor, hostsDisponibles, saltoRed=0, o
             primerHostOK,
             ultimoHostOK,
             broadcastOK,
-            siguienteSubred
+            ultimoOctetoSubredActual
         ];
     }
+}
+
+const crearFilaResultado = (arrayParametros, index, hostsDisponibles, nuevaMascaraSubred) => {
+    const direccionSubred = arrayParametros[0];
+    const primerHost = arrayParametros[1];
+    const ultimoHost = arrayParametros[2];
+    const broadcast = arrayParametros[3];
+    
+    //Ahora tocará crear las filas
+    const nuevaFila = document.createElement('tr');
+    nuevaFila.innerHTML = `
+        <td>Subred ${index+1}</td>
+        <td>${hostsDisponibles}</td>
+        <td>${direccionSubred}</td>
+        <td>${nuevaMascaraSubred}</td>
+        <td>${primerHost}</td>
+        <td>${ultimoHost}</td>
+        <td>${broadcast}</td>
+    `;
+    tbodyResultados.append(nuevaFila);
 }
 
 /***************************************/
