@@ -187,4 +187,5 @@ td {
     justify-content: center;
     max-height: 600px;
     overflow: auto;
+    margin-bottom: 50px;
 }
