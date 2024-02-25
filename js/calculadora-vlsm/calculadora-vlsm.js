@@ -37,7 +37,8 @@ const hallarResultado = (evento) => {
         console.log(arrayInputsValores);
 
         let booleano = true, ultimoOctetoSiguienteSubred;
-
+        hallarPrefijoRed(direccionIpValor);
+        const prefijoRed = datosSubred.prefijoRed;
         const arrayDatosNecesarios = [];
 
         let index = 0;
@@ -50,7 +51,7 @@ const hallarResultado = (evento) => {
             console.log(`Para ${valor} su cantidad de Hosts disponibles: `, hostsDisponibles);
 
             //Calcular el número de bits de subred
-            const prefijoRed = datosSubred.prefijoRed;
+            
             const numeroBitsSubred = (32 - prefijoRed) - valorN;
 
             //Calcular la nueva máscara de subred
@@ -95,17 +96,58 @@ const hallarResultado = (evento) => {
         if(claseSubred === 'A') {
 
         } else if(claseSubred === 'B') {
+            const arrayDireccionesRed = hallarDireccionesRedB(direccionIpValor, arrayDatosNecesarios);
+            console.log('Tamos haciendo de la Clase B')
 
-        } else {
-            const arrayDireccionesRed = hallarDireccionesRed(direccionIpValor, arrayDatosNecesarios);
             arrayDireccionesRed.forEach((direccionRed, index) => {
-                // const numeroSubred = arrayDatosNecesarios[index]['numero_subred'];
                 const hostsDisponibles = arrayDatosNecesarios[index]['hosts_disponibles'];
                 const nuevoPrefijoRed = arrayDatosNecesarios[index]['nuevo_prefijo_red'];
                 const nuevaMascara = arrayDatosNecesarios[index]['nueva_mascara_subred'];
-                // const saltoRed = arrayDatosNecesarios[index]['salto_red'];
 
                 const direccionRedIP = [...direccionRed].join('.');
+                console.log('La direccion RED en el forEach es ', direccionRedIP);
+
+                //TAL VEZ SE TENGA QUE CONSISTENSIAR EN CASO LA SUMA DE ultimoOcteto1 + X de algo Mayor a 255, pero POR AHORA LO DEJARÉ ASÍ
+                const ultimoOcteto1 = direccionRed.pop();
+                const primerHost = direccionRed.concat([ultimoOcteto1 + 1]);
+                const primerHostOK = [...primerHost].join('.');
+                console.log('primerHost', primerHostOK);
+
+                const ultimoHost = direccionRed.concat([ultimoOcteto1 + hostsDisponibles]);
+                const ultimiHostOK = [...ultimoHost].join('.');
+                console.log('ultimoHost', ultimiHostOK);
+
+                const broadcast = direccionRed.concat([ultimoOcteto1 + hostsDisponibles + 1]);
+                const broadcastOK = [...broadcast].join('.');
+                console.log('broadcast', broadcastOK);
+
+                //Ahora tocará crear las filas
+                const nuevaFila = document.createElement('tr');
+                nuevaFila.innerHTML = `
+                    <td>Subred ${index+1}</td>
+                    <td>${hostsDisponibles}</td>
+                    <td>${direccionRedIP}/${nuevoPrefijoRed}</td>
+                    <td>${nuevaMascara}</td>
+                    <td>${primerHostOK}</td>
+                    <td>${ultimiHostOK}</td>
+                    <td>${broadcastOK}</td>
+                `;
+                tbodyResultados.append(nuevaFila);
+            });
+
+            contenedorResultado.style.display = 'flex';
+            
+        } else {
+            const arrayDireccionesRed = hallarDireccionesRedC(direccionIpValor, arrayDatosNecesarios);
+
+            arrayDireccionesRed.forEach((direccionRed, index) => {
+
+                const hostsDisponibles = arrayDatosNecesarios[index]['hosts_disponibles'];
+                const nuevoPrefijoRed = arrayDatosNecesarios[index]['nuevo_prefijo_red'];
+                const nuevaMascara = arrayDatosNecesarios[index]['nueva_mascara_subred'];
+
+                const direccionRedIP = [...direccionRed].join('.');
+                console.log('La direccion RED en el forEach es ', direccionRedIP)
 
                 const ultimoOcteto1 = direccionRed.pop();
                 const primerHost = direccionRed.concat([ultimoOcteto1 + 1]);
@@ -141,20 +183,59 @@ const hallarResultado = (evento) => {
     }
 }
 
-const hallarDireccionesRed = (direccionIpValor, arrayDatosNecesarios) => {
+const hallarDireccionesRedC = (direccionIpValor, arrayDatosNecesarios) => {
     //Formando la PRIMERA DIRECCIÓN DE RED -> CLASE C
     const direccionIpTresOctetos = direccionIpValor.split('.');
     direccionIpTresOctetos.pop();
     direccionIpTresOctetos.push(0);
     const primeraDireccionRed = direccionIpTresOctetos;
 
-    console.log('SFEGEGWEGWEG', primeraDireccionRed)
+    console.log('PRIMERA DIRECCION RED', primeraDireccionRed)
 
     let direccionRed1 = [...primeraDireccionRed];
     const arrayDireccionesRed = arrayDatosNecesarios.map(objetoDatos => {
         const saltoRed = objetoDatos['salto_red'];
 
-        direccionRed1[3] = direccionRed1[3] + saltoRed;
+        const sumita = direccionRed1[3] + saltoRed;
+        direccionRed1[3] = sumita;
+        const direccionRed = [...direccionRed1];
+
+        return direccionRed;
+    });
+
+    arrayDireccionesRed.unshift(primeraDireccionRed);
+    arrayDireccionesRed.pop();
+
+    console.log('arrayDireccionesRed', arrayDireccionesRed.map(direccionRed => direccionRed.join('.')));
+    return arrayDireccionesRed;
+}
+
+const hallarDireccionesRedB = (direccionIpValor, arrayDatosNecesarios) => {
+    const direccionIpTresOctetos = direccionIpValor.split('.');
+    direccionIpTresOctetos.pop();
+    direccionIpTresOctetos.pop();
+    direccionIpTresOctetos.push(0);
+    direccionIpTresOctetos.push(0);
+    const primeraDireccionRed = direccionIpTresOctetos;
+    console.log('PRIMERA DIRECCION RED', primeraDireccionRed)
+
+    let direccionRed1 = [...primeraDireccionRed];
+    let iterador = 0;
+    const arrayDireccionesRed = arrayDatosNecesarios.map(objetoDatos => {
+        const saltoRed = objetoDatos['salto_red'];
+
+        const sumita = direccionRed1[3] + saltoRed;
+        
+        if(sumita > 255) {
+            iterador++;
+            const resto = sumita % 256;
+
+            direccionRed1[2] = iterador;
+            direccionRed1[3] = resto;
+        } else {
+            direccionRed1[3] = sumita;
+        }
+
         const direccionRed = [...direccionRed1];
         return direccionRed;
     });
@@ -162,7 +243,7 @@ const hallarDireccionesRed = (direccionIpValor, arrayDatosNecesarios) => {
     arrayDireccionesRed.unshift(primeraDireccionRed);
     arrayDireccionesRed.pop();
 
-    console.log('XDDDDDDDDDDDDDDDDDDDDDDDDD', arrayDireccionesRed);
+    console.log('arrayDireccionesRed', arrayDireccionesRed.map(direccionRed => direccionRed.join('.')));
     return arrayDireccionesRed;
 }
 
@@ -205,72 +286,6 @@ const hallarNuevaMascaraSubred = (cadena32Bits) => {
     }
     
     return array;
-}
-
-const calcularParametrosRed = (direccionIpValor, hostsDisponibles, saltoRed=0, octeto=0) => {
-    const claseRed = datosSubred.claseRed;
-    const octetosDireccionIP = direccionIpValor.split('.'); // ['192', '168', '200', '139']
-    console.log(octetosDireccionIP);
-
-    if(claseRed === 'A') {
-        
-    } else if(claseRed === 'B') {
-
-    } else {
-        octetosDireccionIP.pop();
-        const direccionSubred = octetosDireccionIP.concat([saltoRed+octeto]); // ['192', '168', '200', 0]
-        const direccionSubredOK = [...direccionSubred];
-        const ultimoOctetoSubredActual = direccionSubredOK[3];
-        console.log('direccionSubred', direccionSubredOK);
-        console.log('ultimoOctetoSubredActual', ultimoOctetoSubredActual);
-
-        const ultimoOcteto = direccionSubred.pop();
-        const primerHost = octetosDireccionIP.concat([ultimoOcteto + 1]);
-        const primerHostOK = [...primerHost];
-        console.log('primerHost', primerHostOK);
-
-        // const ultimoOcteto2 = primerHost.pop();
-        const ultimoHost = octetosDireccionIP.concat([ultimoOcteto + hostsDisponibles]);
-        const ultimoHostOK = [...ultimoHost];
-        console.log('ultimoHost', ultimoHostOK);
-
-        const ultimoOcteto2 = ultimoHost.pop();
-        const broadcast = ultimoHost.concat([ultimoOcteto2 + 1]);
-        const broadcastOK = [...broadcast];
-        console.log('broadcast', broadcastOK);
-
-        const ultimoOcteto3 = broadcast.pop();
-        const siguienteSubred = broadcast.concat([ultimoOcteto3 + 1]);
-        console.log('siguienteSubred', siguienteSubred);
-
-        return [
-            direccionSubredOK,
-            primerHostOK,
-            ultimoHostOK,
-            broadcastOK,
-            ultimoOctetoSubredActual
-        ];
-    }
-}
-
-const crearFilaResultado = (arrayParametros, index, hostsDisponibles, nuevaMascaraSubred) => {
-    const direccionSubred = arrayParametros[0];
-    const primerHost = arrayParametros[1];
-    const ultimoHost = arrayParametros[2];
-    const broadcast = arrayParametros[3];
-    
-    //Ahora tocará crear las filas
-    const nuevaFila = document.createElement('tr');
-    nuevaFila.innerHTML = `
-        <td>Subred ${index+1}</td>
-        <td>${hostsDisponibles}</td>
-        <td>${direccionSubred}</td>
-        <td>${nuevaMascaraSubred}</td>
-        <td>${primerHost}</td>
-        <td>${ultimoHost}</td>
-        <td>${broadcast}</td>
-    `;
-    tbodyResultados.append(nuevaFila);
 }
 
 /***************************************/

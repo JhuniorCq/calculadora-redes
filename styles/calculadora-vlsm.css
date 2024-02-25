@@ -183,9 +183,11 @@ td {
 .contenedor-resultado {
     display: none;
     min-width: 70%;
+
+    /* background-color: #11897d; */
     /* display: flex; */
     justify-content: center;
     max-height: 600px;
     overflow: auto;
-    margin-bottom: 50px;
+    margin: 30px 0 40px;
 }
