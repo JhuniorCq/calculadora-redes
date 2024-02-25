@@ -125,6 +125,8 @@ const hallarResultado = (evento) => {
         }
 
         console.log(arrayDatosNecesarios);
+        
+        tbodyResultados.innerText = '';
 
         const claseSubred = datosSubred.claseRed;
         if(claseSubred === 'A') {
@@ -132,32 +134,73 @@ const hallarResultado = (evento) => {
         } else if(claseSubred === 'B') {
 
         } else {
-            //Formando la PRIMERA DIRECCIÓN DE RED -> CLASE C
-            const direccionIpTresOctetos = direccionIpValor.split('.');
-            direccionIpTresOctetos.pop();
-            direccionIpTresOctetos.push(0);
-            const primeraDireccionRed = direccionIpTresOctetos;
+            const arrayDireccionesRed = hallarDireccionesRed(direccionIpValor, arrayDatosNecesarios);
+            arrayDireccionesRed.forEach((direccionRed, index) => {
+                const numeroSubred = arrayDatosNecesarios[index]['numero_subred'];
+                const hostsDisponibles = arrayDatosNecesarios[index]['hosts_disponibles'];
+                const nuevoPrefijoRed = arrayDatosNecesarios[index]['nuevo_prefijo_red'];
+                const nuevaMascara = arrayDatosNecesarios[index]['nueva_mascara_subred'];
+                // const saltoRed = arrayDatosNecesarios[index]['salto_red'];
 
-            console.log('SFEGEGWEGWEG', primeraDireccionRed)
+                const direccionRedIP = [...direccionRed].join('.');
 
-            let direccionRed1 = [...primeraDireccionRed];
-            const arrayDireccionesRed = arrayDatosNecesarios.map(objetoDatos => {
-                const saltoRed = objetoDatos['salto_red'];
+                const ultimoOcteto1 = direccionRed.pop();
+                const primerHost = direccionRed.concat([ultimoOcteto1 + 1]);
+                const primerHostOK = [...primerHost].join('.');
+                console.log('primerHost', primerHostOK);
 
-                direccionRed1[3] = direccionRed1[3] + saltoRed;
-                const direccionRed = [...direccionRed1];
-                return direccionRed;
+                const ultimoHost = direccionRed.concat([ultimoOcteto1 + hostsDisponibles]);
+                const ultimiHostOK = [...ultimoHost].join('.');
+                console.log('ultimoHost', ultimiHostOK);
+
+                const broadcast = direccionRed.concat([ultimoOcteto1 + hostsDisponibles + 1]);
+                const broadcastOK = [...broadcast].join('.');
+                console.log('broadcast', broadcastOK);
+
+                //Ahora tocará crear las filas
+                const nuevaFila = document.createElement('tr');
+                nuevaFila.innerHTML = `
+                    <td>Subred ${index+1}</td>
+                    <td>${hostsDisponibles}</td>
+                    <td>${direccionRedIP}/${nuevoPrefijoRed}</td>
+                    <td>${nuevaMascara}</td>
+                    <td>${primerHostOK}</td>
+                    <td>${ultimiHostOK}</td>
+                    <td>${broadcastOK}</td>
+                `;
+                tbodyResultados.append(nuevaFila);
+
             });
-
-            arrayDireccionesRed.unshift(primeraDireccionRed);
-            arrayDireccionesRed.pop();
-
-            console.log('XDDDDDDDDDDDDDDDDDDDDDDDDD', arrayDireccionesRed);
-
+            contenedorResultado.style.display = 'flex';
         }
     } catch(err) {
         console.error('', err.message);
     }
+}
+
+const hallarDireccionesRed = (direccionIpValor, arrayDatosNecesarios) => {
+    //Formando la PRIMERA DIRECCIÓN DE RED -> CLASE C
+    const direccionIpTresOctetos = direccionIpValor.split('.');
+    direccionIpTresOctetos.pop();
+    direccionIpTresOctetos.push(0);
+    const primeraDireccionRed = direccionIpTresOctetos;
+
+    console.log('SFEGEGWEGWEG', primeraDireccionRed)
+
+    let direccionRed1 = [...primeraDireccionRed];
+    const arrayDireccionesRed = arrayDatosNecesarios.map(objetoDatos => {
+        const saltoRed = objetoDatos['salto_red'];
+
+        direccionRed1[3] = direccionRed1[3] + saltoRed;
+        const direccionRed = [...direccionRed1];
+        return direccionRed;
+    });
+
+    arrayDireccionesRed.unshift(primeraDireccionRed);
+    arrayDireccionesRed.pop();
+
+    console.log('XDDDDDDDDDDDDDDDDDDDDDDDDD', arrayDireccionesRed);
+    return arrayDireccionesRed;
 }
 
 const hallarValorNyHostsDisponibles = (valor) => {
