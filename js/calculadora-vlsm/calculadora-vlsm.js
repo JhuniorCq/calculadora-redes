@@ -94,6 +94,8 @@ const hallarResultado = (evento) => {
 
         const claseSubred = datosSubred.claseRed;
         if(claseSubred === 'A') {
+            const arrayDireccionesRed = hallarDireccionesRedA(direccionIpValor, arrayDatosNecesarios);
+            console.log('Tamos haciendo de la Clase A')
 
         } else if(claseSubred === 'B') {
             const arrayDireccionesRed = hallarDireccionesRedB(direccionIpValor, arrayDatosNecesarios);
@@ -136,7 +138,7 @@ const hallarResultado = (evento) => {
             });
 
             contenedorResultado.style.display = 'flex';
-            
+
         } else {
             const arrayDireccionesRed = hallarDireccionesRedC(direccionIpValor, arrayDatosNecesarios);
 
