@@ -75,7 +75,7 @@ const hallarResultado = (evento) => {
 
             //Calcular los parámetros de la red -> Almacenaré algunos de los datos halladas paracada Fila, en este Objeto
             const objetoDatosSubred = {
-                numero_subred: index + 1,
+                // numero_subred: index + 1,
                 hosts_disponibles: hostsDisponibles,
                 nuevo_prefijo_red: nuevoPrefijoRed,
                 nueva_mascara_subred: nuevaMascaraSubred,
@@ -84,43 +84,6 @@ const hallarResultado = (evento) => {
             
             arrayDatosNecesarios.push(objetoDatosSubred);
 
-            index++;
-            /*-------------------------------------------------------- */
-            //Calcular los parámetros de la red
-            
-            // if(booleano) {
-            //     const arrayResultados = calcularParametrosRed(direccionIpValor, hostsDisponibles);
-            //     ultimoOctetoSiguienteSubred = arrayResultados[4];
-            //     booleano = false;
-            // }
-
-            // console.log('ultimoOcteto', ultimoOctetoSiguienteSubred)
-            // const arrayParametros = calcularParametrosRed(direccionIpValor, hostsDisponibles, saltoRed, ultimoOctetoSiguienteSubred);
-
-            // // crearFilaResultado(arrayParametros, index, hostsDisponibles, nuevaMascaraSubred);
-            
-            // const direccionSubred = arrayParametros[0];
-            // const primerHost = arrayParametros[1];
-            // const ultimoHost = arrayParametros[2];
-            // const broadcast = arrayParametros[3];
-            
-            // //Ahora tocará crear las filas
-            // const nuevaFila = document.createElement('tr');
-            // nuevaFila.innerHTML = `
-            //     <td>Subred ${index+1}</td>
-            //     <td>${hostsDisponibles}</td>
-            //     <td>${direccionSubred}</td>
-            //     <td>${nuevaMascaraSubred}</td>
-            //     <td>${primerHost}</td>
-            //     <td>${ultimoHost}</td>
-            //     <td>${broadcast}</td>
-            // `;
-            // tbodyResultados.append(nuevaFila);
-
-            
-            // ultimoOctetoSiguienteSubred = arrayParametros[4];
-            
-            // contenedorResultado.style.display = 'flex';
             // index++;
         }
 
@@ -136,7 +99,7 @@ const hallarResultado = (evento) => {
         } else {
             const arrayDireccionesRed = hallarDireccionesRed(direccionIpValor, arrayDatosNecesarios);
             arrayDireccionesRed.forEach((direccionRed, index) => {
-                const numeroSubred = arrayDatosNecesarios[index]['numero_subred'];
+                // const numeroSubred = arrayDatosNecesarios[index]['numero_subred'];
                 const hostsDisponibles = arrayDatosNecesarios[index]['hosts_disponibles'];
                 const nuevoPrefijoRed = arrayDatosNecesarios[index]['nuevo_prefijo_red'];
                 const nuevaMascara = arrayDatosNecesarios[index]['nueva_mascara_subred'];
