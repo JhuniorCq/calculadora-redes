@@ -36,17 +36,6 @@ const hallarResultado = (evento) => {
 
         console.log(arrayInputsValores);
 
-        //Formando la PRIMERA DIRECCIÓN DE RED
-        const direccionIpTresOctetos = direccionIpValor.split('.');
-        direccionIpTresOctetos.pop();
-        direccionIpTresOctetos.push(0);
-        // const primeraDireccionRed = direccionIpTresOctetos;
-        // const primeraDireccionRedOK = [...primeraDireccionRed];
-
-
-
-        console.log('SFEGEGWEGWEG', direccionIpTresOctetos)
-
         let booleano = true, ultimoOctetoSiguienteSubred;
 
         const arrayDatosNecesarios = [];
@@ -85,9 +74,15 @@ const hallarResultado = (evento) => {
             console.log('La Dirección IP inicial es: ', direccionIpValor);
 
             //Calcular los parámetros de la red -> Almacenaré algunos de los datos halladas paracada Fila, en este Objeto
-            const objetoDatosFila = {};
-            objetoDatosFila['numero_subred'] = index + 1;
-
+            const objetoDatosSubred = {
+                numero_subred: index + 1,
+                hosts_disponibles: hostsDisponibles,
+                nuevo_prefijo_red: nuevoPrefijoRed,
+                nueva_mascara_subred: nuevaMascaraSubred,
+                salto_red: saltoRed
+            };
+            
+            arrayDatosNecesarios.push(objetoDatosSubred);
 
             index++;
             /*-------------------------------------------------------- */
@@ -129,6 +124,37 @@ const hallarResultado = (evento) => {
             // index++;
         }
 
+        console.log(arrayDatosNecesarios);
+
+        const claseSubred = datosSubred.claseRed;
+        if(claseSubred === 'A') {
+
+        } else if(claseSubred === 'B') {
+
+        } else {
+            //Formando la PRIMERA DIRECCIÓN DE RED -> CLASE C
+            const direccionIpTresOctetos = direccionIpValor.split('.');
+            direccionIpTresOctetos.pop();
+            direccionIpTresOctetos.push(0);
+            const primeraDireccionRed = direccionIpTresOctetos;
+
+            console.log('SFEGEGWEGWEG', primeraDireccionRed)
+
+            let direccionRed1 = [...primeraDireccionRed];
+            const arrayDireccionesRed = arrayDatosNecesarios.map(objetoDatos => {
+                const saltoRed = objetoDatos['salto_red'];
+
+                direccionRed1[3] = direccionRed1[3] + saltoRed;
+                const direccionRed = [...direccionRed1];
+                return direccionRed;
+            });
+
+            arrayDireccionesRed.unshift(primeraDireccionRed);
+            arrayDireccionesRed.pop();
+
+            console.log('XDDDDDDDDDDDDDDDDDDDDDDDDD', arrayDireccionesRed);
+
+        }
     } catch(err) {
         console.error('', err.message);
     }
