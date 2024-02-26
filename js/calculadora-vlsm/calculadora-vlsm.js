@@ -4,6 +4,7 @@ const prefijoRedInput = document.getElementById('prefijo-red');
 const numeroSubRedesInput = document.getElementById('numero-subredes');
 import {hallarPrefijoRed} from '../calculadora-vlsm/hallarPrefijoRed.js';
 import {cambiarMarginLabel} from '../detalles-calculadoras.js';
+import {validarDireccionIP, validarNumeroSubRedes} from '../calculadora-flsm/validaciones-flsm.js';
 
 const contenedorTablaSubredes = document.querySelector('.contenedor-subredes');
 const cuerpoTabla = document.querySelector('.cuerpo-tabla');
@@ -20,13 +21,11 @@ const hallarResultado = (evento) => {
 
         const direccionIpValor = direccionIpInput.value;
         
-        
         //Cada INPUT FILA es un Número de Host nodeListInputFila
         const nodeListInputFila = document.querySelectorAll('.input-fila');
         const arrayInputFila = [...nodeListInputFila];
         
-        if(nodeListInputFila.length <= 0) {
-            alert('El número de subredes debe ser positivo.');
+        if(!validarDireccionIP(direccionIpValor) || !validarNumeroSubRedes(nodeListInputFila.length)) {
             return;
         }
 
@@ -36,7 +35,6 @@ const hallarResultado = (evento) => {
 
         console.log(arrayInputsValores);
 
-        let booleano = true, ultimoOctetoSiguienteSubred;
         hallarPrefijoRed(direccionIpValor);
         const prefijoRed = datosSubred.prefijoRed;
         const arrayDatosNecesarios = [];
@@ -76,7 +74,6 @@ const hallarResultado = (evento) => {
 
             //Calcular los parámetros de la red -> Almacenaré algunos de los datos halladas paracada Fila, en este Objeto
             const objetoDatosSubred = {
-                // numero_subred: index + 1,
                 hosts_disponibles: hostsDisponibles,
                 nuevo_prefijo_red: nuevoPrefijoRed,
                 nueva_mascara_subred: nuevaMascaraSubred,
@@ -84,8 +81,6 @@ const hallarResultado = (evento) => {
             };
             
             arrayDatosNecesarios.push(objetoDatosSubred);
-
-            // index++;
         }
 
         console.log(arrayDatosNecesarios);
@@ -95,7 +90,46 @@ const hallarResultado = (evento) => {
         const claseSubred = datosSubred.claseRed;
         if(claseSubred === 'A') {
             const arrayDireccionesRed = hallarDireccionesRedA(direccionIpValor, arrayDatosNecesarios);
-            console.log('Tamos haciendo de la Clase A')
+            console.log('Tamos haciendo de la Clase A');
+
+            arrayDireccionesRed.forEach((direccionRed, index) => {
+                
+                const hostsDisponibles = arrayDatosNecesarios[index]['hosts_disponibles'];
+                const nuevoPrefijoRed = arrayDatosNecesarios[index]['nuevo_prefijo_red'];
+                const nuevaMascara = arrayDatosNecesarios[index]['nueva_mascara_subred'];
+
+                const direccionRedIP = [...direccionRed].join('.');
+                console.log('La direccion RED en el forEach es ', direccionRedIP);
+
+                //TAL VEZ SE TENGA QUE CONSISTENSIAR EN CASO LA SUMA DE ultimoOcteto1 + X de algo Mayor a 255, pero POR AHORA LO DEJARÉ ASÍ
+                const ultimoOcteto1 = direccionRed.pop();
+                const primerHost = direccionRed.concat([ultimoOcteto1 + 1]);
+                const primerHostOK = [...primerHost].join('.');
+                console.log('primerHost', primerHostOK);
+
+                const ultimoHost = direccionRed.concat([ultimoOcteto1 + hostsDisponibles]);
+                const ultimiHostOK = [...ultimoHost].join('.');
+                console.log('ultimoHost', ultimiHostOK);
+
+                const broadcast = direccionRed.concat([ultimoOcteto1 + hostsDisponibles + 1]);
+                const broadcastOK = [...broadcast].join('.');
+                console.log('broadcast', broadcastOK);
+
+                //Ahora tocará crear las filas
+                const nuevaFila = document.createElement('tr');
+                nuevaFila.innerHTML = `
+                    <td>Subred ${index+1}</td>
+                    <td>${hostsDisponibles}</td>
+                    <td>${direccionRedIP}/${nuevoPrefijoRed}</td>
+                    <td>${nuevaMascara}</td>
+                    <td>${primerHostOK}</td>
+                    <td>${ultimiHostOK}</td>
+                    <td>${broadcastOK}</td>
+                `;
+                tbodyResultados.append(nuevaFila);
+            });
+
+            contenedorResultado.style.display = 'flex';
 
         } else if(claseSubred === 'B') {
             const arrayDireccionesRed = hallarDireccionesRedB(direccionIpValor, arrayDatosNecesarios);
