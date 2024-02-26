@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Glass+Antiqua&family=Luxurious+Roman&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+}
 
 .contenedor {
     width: 100%;
@@ -5,16 +13,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background: linear-gradient(to bottom right, #116c63, #ffffff); */
     background-color: white;
     overflow: hidden;
 }
 
 .titulo {
+    font-size: 3.5rem;
     width: 100%;
     text-align: center;
-    margin-bottom: 40px;
-    color: #0e346e;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.numero-grupo {
+    margin-bottom: 30px;
 }
 
 .contenedor-opciones {
@@ -25,65 +37,49 @@
 }
 
 .contenedor-opcion {
+    width: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* border: 1px solid black; */
     border: none;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
 }
 
-.img-calculadora {
-    width: 150px;
+.contenedor-imagen {
+    width: 100%;
 }
 
-.img-calculadora:hover {
-    scale: 1.1;
+.img-calculadora {
+    width: 100%;
+}
+
+.contenedor-texto {
+    margin: 20px 0 30px;
+    width: 80%;
 }
 
 .nombre-calculadora {
-    margin-top: 20px;
+    margin: 10px 0;
     color: #3472ce;
-    /* font-size: 1.2rem; */
-    font-weight: bold;
+    font-size: 1.7rem;
 }
 
-@media screen and (max-width: 650px){
-    .contenedor2 {
-        padding: 30px 0;
-    }
-    
-    .contenedor-opciones {
-        flex-direction: column;
-    }
-
-    .titulo {
-        padding: 0 20px;
-        margin-bottom: 20px;
-    }
-
-    .img-calculadora {
-        width: 120px;
-    }
-
-    .contenedor-opcion {
-        margin-bottom: 40px;
-    }
+.separador {
+    border-color: white;
+    width: 100%;
 }
 
-@media screen and (max-width: 450px){
-    .contenedor2 {
-        padding: 30px 0;
-    }
+.contenedor-enlace {
+    padding: 20px 0;
 }
 
-@media screen and (max-height: 700px) {
-    .titulo {
-        font-size: 1.8rem;
-    }
+.enlace {
+    text-decoration: none;
+    color: #ffab40;
+    transition: opacity 0.3s ease-in-out;
+}
 
-    .img-calculadora {
-        width: 100px;
-    }
+.enlace:hover {
+    opacity: 0.5;
 }
