@@ -1,6 +1,5 @@
 
 .contenedor-regresar {
-    /* margin-top: 50px; */
     width: 100%;
     margin-bottom: 50px;
 }
@@ -35,11 +34,9 @@
 
 .contenedor-parrafo {
     width: 100%;
-    /* border: 1px solid yellow; */
 }
 
 .formulario {
-    /* border: 1px solid red; */
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -51,7 +48,6 @@
 }
 
 .fila {
-    /* border: 1px solid blue; */
     width: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -60,7 +56,6 @@
 }
 
 .contenedor-campo {
-    /* border: 1px solid brown; */
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -99,7 +94,6 @@
 .boton-calcular {
     color: white;
     font-size: 1rem;
-    /* font-weight: bold; */
     cursor: pointer;
     background-color: #26a69a;
     padding: 10px 20px;
@@ -115,7 +109,6 @@
 }
 
 .resultado {
-    /* display: flex; */
     display: none;
     width: 100%;
     margin-top: 50px;
@@ -123,14 +116,11 @@
     background-color: #e0f2f1;
     justify-content: center;
     align-items: center;
-    /* max-height: 400px; */
-    /* overflow: auto; */
 }
 
 .tabla {
     border-collapse: collapse;
     border: 1px solid white;
-    
 }
 
 td, th {

@@ -49,7 +49,6 @@ const hallarResultado = (evento) => {
             console.log(`Para ${valor} su cantidad de Hosts disponibles: `, hostsDisponibles);
 
             //Calcular el número de bits de subred
-            
             const numeroBitsSubred = (32 - prefijoRed) - valorN;
 
             //Calcular la nueva máscara de subred
@@ -405,7 +404,6 @@ const mostrarNumeroSubredesDinamico = () => {
     
     contenedorTablaSubredes.style.display = 'flex';
 }
-
 
 formulario.addEventListener('submit', hallarResultado);
 direccionIpInput.addEventListener('input', mostrarPrefijoRedDinamico);
