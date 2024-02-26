@@ -249,6 +249,58 @@ const hallarDireccionesRedB = (direccionIpValor, arrayDatosNecesarios) => {
     return arrayDireccionesRed;
 }
 
+const hallarDireccionesRedA = (direccionIpValor, arrayDatosNecesarios) => {
+    const direccionIpTresOctetos = direccionIpValor.split('.');
+    direccionIpTresOctetos.pop();
+    direccionIpTresOctetos.pop();
+    direccionIpTresOctetos.pop();
+    direccionIpTresOctetos.push(0);
+    direccionIpTresOctetos.push(0);
+    direccionIpTresOctetos.push(0);
+    const primeraDireccionRed = direccionIpTresOctetos;
+    console.log('PRIMERA DIRECCION RED A', primeraDireccionRed)
+
+    let direccionRed1 = [...primeraDireccionRed];
+    let iterador = 0;
+    let iterador2 = 0;
+    const arrayDireccionesRed = arrayDatosNecesarios.map(objetoDatos => {
+        const saltoRed = objetoDatos['salto_red'];
+
+        const sumita = direccionRed1[3] + saltoRed;
+
+        if(sumita > 255) {
+            iterador++;
+
+            if(iterador > 255) {
+                iterador2++;
+                const resto = iterador % 256;
+                const resto2 = sumita % 256;
+
+                direccionRed1[1] = iterador2;
+                direccionRed1[2] = resto;
+                direccionRed1[3] = resto2;
+            } else {
+                const resto = sumita % 256;
+
+                direccionRed1[2] = iterador;
+                direccionRed1[3] = resto;
+            }
+
+        } else {
+            direccionRed1[3] = sumita;
+        }
+
+        const direccionRed = [...direccionRed1];
+        return direccionRed;
+    });
+
+    arrayDireccionesRed.unshift(primeraDireccionRed);
+    arrayDireccionesRed.pop();
+
+    console.log('arrayDireccionesRed', arrayDireccionesRed.map(direccionRed => direccionRed.join('.')));
+    return arrayDireccionesRed;
+}
+
 const hallarValorNyHostsDisponibles = (valor) => {
     let i=0, valorN, hostsDisponibles;
 
