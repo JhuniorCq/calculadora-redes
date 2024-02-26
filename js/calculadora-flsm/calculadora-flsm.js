@@ -167,18 +167,11 @@ const mostrarPrefijoRedDinamico = () => {
 
     hallarPrefijoRed(direccionIpValor);
 
-    // prefijoRedInput.value = datosRed.prefijoRed; //Mostramos al Usuario Prefijo de Red obtenido
-
     cambiarMarginLabel(direccionIpInput, prefijoRedInput);
 }
 
 const mostrarNumeroSubredesDinamico = () => {
-    //PROCESO PARA HALLAR EL NÚMERO DE SUBREDES
-    // const hostsSubRedInput = hostsSubRedInput.value;
-    // console.log();
-    //->
-    //REPETIR EL PROCESO DE HALLAR LA CANTIDAD DE HOST POR SUB RED YA NO SERÁ NECESARIO
-    //MOSTRAR AL USUARIO EL NÚMERO DE SUBREDES
+
     cambiarMarginLabel(numeroSubRedesInput, hostsSubRedInput);
 }
 

@@ -4,34 +4,20 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Calculadora de Subredes</title>
+        <!-- CSS -->
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="styles/index.css">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     </head>
     <body>
         <main>
             <div class="contenedor">
                 <h1 class="titulo">Calculadoras de Subredes</h1>
                 <h2 class="numero-grupo">Grupo 6</h2>
+                <h3 class="ver-integrantes">Ver integrantes</h3>
 
                 <div class="contenedor-opciones">
-                    <div class="contenedor-opcion">
-                        <div class="contenedor-imagen">
-                            <a href="calculadora-flsm.html">
-                                <img src="assets/img/calculadora-FLSM.png" alt="Calculadora FLSM" class="img-calculadora">
-                            </a>
-                        </div>
-                        
-                        <div class="contenedor-texto">
-                            <h2 class="nombre-calculadora">Calculadora FLSM</h2>
-                            <p>
-                                Utiliza esta sencilla calculadora para obtener subredes FLSM.
-                            </p>
-                        </div>
-                        <hr class="separador">
-                        <div class="contenedor-enlace">
-                            <a href="calculadora-flsm.html" class="enlace">IR A LA CALCULADORA</a>
-                        </div>
-                    </div>
                     <div class="contenedor-opcion">
                         <div class="contenedor-imagen">
                             <a href="calculadora-vlsm.html">
@@ -50,8 +36,44 @@
                             <a href="calculadora-vlsm.html" class="enlace">IR A LA CALCULADORA</a>
                         </div>
                     </div>
+
+                    <div class="contenedor-opcion">
+                        <div class="contenedor-imagen">
+                            <a href="calculadora-flsm.html">
+                                <img src="assets/img/calculadora-FLSM.png" alt="Calculadora FLSM" class="img-calculadora">
+                            </a>
+                        </div>
+                        
+                        <div class="contenedor-texto">
+                            <h2 class="nombre-calculadora">Calculadora FLSM</h2>
+                            <p>
+                                Utiliza esta sencilla calculadora para obtener subredes FLSM.
+                            </p>
+                        </div>
+                        <hr class="separador">
+                        <div class="contenedor-enlace">
+                            <a href="calculadora-flsm.html" class="enlace">IR A LA CALCULADORA</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
+
+        <div class="fondo-modal" id="fondo-modal">
+            <div class="contenedor-modal cerrar-contenedor-modal" id="contenedor-modal">
+                <i class="bi bi-x-circle-fill btn-eliminar" id="btn-cerrar"></i>
+                <div class="contenedor-info-modal">
+                    <h2 class="titulo-integrantes">Lista de Integrantes</h2>
+                    <ol class="lista-integrantes">
+                        <li class="integrante">Ccora Quispe, Holiver Jhunior</li>
+                        <li class="integrante">Sifuentes Castillo, Luis Alberto</li>
+                        <li class="integrante">Balceda Delgado, Mariana Alejandra</li>
+                        <li class="integrante">Cruz Bravo, Maycol Augusto</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/verIntegrantes.js"></script>
     </body>
 </html>
