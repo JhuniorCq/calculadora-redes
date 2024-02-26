@@ -157,25 +157,47 @@
 
 .titulo-integrantes {
     font-size: 2.3rem;
+    text-align: center;
     margin-bottom: 20px;
     color: #17478f;
 }
 
 .lista-integrantes {
+    list-style-type: none;
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
-    /* justify-content: center; */
+    align-items: center;
     gap: 10px;
 }
 
 .integrante {
     font-size: 1.5rem;
+    text-align: center;
+}
+
+@media screen and (max-width: 1070px){
+    .integrante {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+    .contenedor-modal {
+        width: 50vw;
+    }
 }
 
 @media screen and (max-width: 780px){
     .contenedor-opciones {
         gap: 100px;
+    }
+    .titulo-integrantes {
+        font-size: 2.1rem;
+    }
+    .integrante {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    .contenedor-modal {
+        width: 60vw;
     }
 }
 
